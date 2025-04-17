@@ -6,10 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"CITY": {
-				"type": "string"
-			},
-			"YEAR": {
+			"FileName": {
 				"type": "string"
 			}
 		},
@@ -19,7 +16,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@concat(dataset().CITY, '_', dataset().YEAR, '.tsv')\n",
+					"value": "@dataset().FileName",
 					"type": "Expression"
 				},
 				"fileSystem": "bronzefood"
