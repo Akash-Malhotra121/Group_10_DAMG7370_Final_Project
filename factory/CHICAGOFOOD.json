@@ -1,0 +1,9 @@
+{
+	"name": "CHICAGOFOOD",
+	"location": "centralus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "93c4358c-1dc2-45fc-97c6-6be13deddd7a",
+		"tenantId": "a8eec281-aaa3-4dae-ac9b-9a398b9215e7"
+	}
+}
