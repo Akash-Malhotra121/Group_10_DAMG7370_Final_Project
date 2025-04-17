@@ -1,0 +1,30 @@
+{
+	"name": "CHICAGO_RAW",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorageGP",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"CITY": {
+				"type": "string"
+			},
+			"YEAR": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "bronzefood"
+			},
+			"columnDelimiter": "\t",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
