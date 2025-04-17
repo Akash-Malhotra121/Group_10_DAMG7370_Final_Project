@@ -3,45 +3,77 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "CHICAGO",
-				"type": "Copy",
+				"name": "ForEach1",
+				"type": "ForEach",
 				"dependsOn": [],
-				"policy": {
-					"timeout": "0.00:30:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": false,
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
+					"items": {
+						"value": "@pipeline().parameters.FILENAME_LIST",
+						"type": "Expression"
 					},
-					"enableStaging": false
-				},
-				"inputs": [
-					{
-						"referenceName": "CHICAGO_RAW",
-						"type": "DatasetReference"
-					}
-				]
+					"activities": [
+						{
+							"name": "CHICAGO",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.00:30:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": false,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "SnowflakeV2Sink",
+									"importSettings": {
+										"type": "SnowflakeImportCopyCommand"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "CHICAGO_RAW",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "SnowflakeCHICAGO",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					]
+				}
 			}
 		],
 		"parameters": {
-			"City": {
+			"FILENAME": {
 				"type": "string"
 			},
-			"Year": {
-				"type": "string"
+			"FILENAME_LIST": {
+				"type": "array"
 			}
 		},
 		"annotations": []
