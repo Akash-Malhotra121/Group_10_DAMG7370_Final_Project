@@ -19,7 +19,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@concat(dataset().city, '_', dataset().year, '.tsv')",
+					"value": "@concat(dataset().CITY,'_', dataset().YEAR, '.tsv')\n",
 					"type": "Expression"
 				},
 				"fileSystem": "bronzefood"
