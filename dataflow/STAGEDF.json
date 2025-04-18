@@ -109,7 +109,7 @@
 				"     validateSchema: false,",
 				"     format: 'table') ~> STGDFDallas",
 				"unionCD derive(RISK_LEVEL = iif(isNull(RISK_LEVEL), 'Unknown', RISK_LEVEL)) ~> derivedColumn1",
-				"derivedColumn1 keyGenerate(output(Inspection_SK as long),",
+				"derivedColumn1 keyGenerate(output(INSPECTION_SK as long),",
 				"     startAt: 1L,",
 				"     stepValue: 1L) ~> surrogateKey1",
 				"STGDFChicago select(mapColumn(",
@@ -200,7 +200,8 @@
 				"          ZIP_CODE,",
 				"          CITY,",
 				"          STATE,",
-				"          ADDRESS",
+				"          ADDRESS,",
+				"          Inspection_SK = INSPECTION_SK",
 				"     )) ~> STGFoodInspection"
 			]
 		}
