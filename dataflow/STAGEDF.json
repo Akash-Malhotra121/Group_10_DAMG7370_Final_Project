@@ -1,0 +1,189 @@
+{
+	"name": "STAGEDF",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "STGDFChicago",
+						"type": "DatasetReference"
+					},
+					"name": "STGDFChicago"
+				},
+				{
+					"dataset": {
+						"referenceName": "STGDFDallas",
+						"type": "DatasetReference"
+					},
+					"name": "STGDFDallas"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "STGFoodInspection",
+						"type": "DatasetReference"
+					},
+					"name": "STGFoodInspection"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "surrogateKey1"
+				},
+				{
+					"name": "selectChicago"
+				},
+				{
+					"name": "unionCD"
+				},
+				{
+					"name": "selectDallas"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          INSPECTION_ID as string,",
+				"          DBA_NAME as string,",
+				"          AKA_NAME as string,",
+				"          LICENSE_NUMBER as string,",
+				"          FACILITY_TYPE as string,",
+				"          RISK as string,",
+				"          ADDRESS as string,",
+				"          CITY as string,",
+				"          STATE as string,",
+				"          ZIP as string,",
+				"          INSPECTION_DATE as date,",
+				"          INSPECTION_TYPE as string,",
+				"          RESULTS as string,",
+				"          VIOLATIONS as string,",
+				"          LATITUDE as double,",
+				"          LONGITUDE as double,",
+				"          LOCATION as string,",
+				"          VIOLATION_CATEGORY_ID as decimal(38,0),",
+				"          VIOLATION_CATEGORY as string,",
+				"          VIOLATION_COMMENT as string,",
+				"          RISK_LEVEL_NUMBER as string,",
+				"          RISK_LEVEL as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> STGDFChicago",
+				"source(output(",
+				"          INSPECTION_ID as string,",
+				"          RESTAURANT_NAME as string,",
+				"          INSPECTION_TYPE as string,",
+				"          INSPECTION_DATE as date,",
+				"          INSPECTION_SCORE as decimal(38,0),",
+				"          STREET_NAME as string,",
+				"          STREET_TYPE as string,",
+				"          ZIP_CODE as string,",
+				"          INSPECTION_MONTH as string,",
+				"          INSPECTION_YEAR as string,",
+				"          LAT_LONG_LOC as string,",
+				"          NAME as string,",
+				"          VALUE as string,",
+				"          VIOLATIONS_1 as string,",
+				"          VIOLATION_POINT as decimal(38,0),",
+				"          VIOLATION_OTHER as string,",
+				"          STATE as string,",
+				"          FACILITY_TYPE as string,",
+				"          CITY as string,",
+				"          RIGHT_INSPECTION_ID as string,",
+				"          VIOLATION_CATEGORY_ID as string,",
+				"          VIOLATION_CATEGORY as string,",
+				"          LATITUDE as double,",
+				"          LONGITUDE as double,",
+				"          RISK_LEVEL as string,",
+				"          INSPECTION_RESULT as string,",
+				"          AKA_NAME as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> STGDFDallas",
+				"unionCD derive(RISK_LEVEL = iif(isNull(RISK_LEVEL), 'Unknown', RISK_LEVEL)\r",
+				") ~> derivedColumn1",
+				"derivedColumn1 keyGenerate(output(Inspection_SK as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> surrogateKey1",
+				"STGDFChicago select(mapColumn(",
+				"          INSPECTION_ID,",
+				"          DBA_NAME,",
+				"          AKA_NAME,",
+				"          FACILITY_TYPE,",
+				"          ADDRESS,",
+				"          CITY,",
+				"          STATE,",
+				"          ZIP_CODE = ZIP,",
+				"          INSPECTION_DATE,",
+				"          INSPECTION_TYPE,",
+				"          INSPECTION_RESULT = RESULTS,",
+				"          LATITUDE,",
+				"          LONGITUDE,",
+				"          ADDRESS = LOCATION,",
+				"          VIOLATION_CATEGORY_ID,",
+				"          VIOLATION_CATEGORY,",
+				"          VIOLATION_DESCRIPTION = VIOLATION_COMMENT,",
+				"          RISK_LEVEL",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectChicago",
+				"selectChicago, selectDallas union(byName: true)~> unionCD",
+				"STGDFDallas select(mapColumn(",
+				"          INSPECTION_ID,",
+				"          DBA_NAME = RESTAURANT_NAME,",
+				"          INSPECTION_TYPE,",
+				"          INSPECTION_DATE,",
+				"          ZIP_CODE,",
+				"          ADDRESS = LAT_LONG_LOC,",
+				"          AKA_NAME,",
+				"          VIOLATION_DESCRIPTION = VIOLATION_OTHER,",
+				"          STATE,",
+				"          FACILITY_TYPE,",
+				"          CITY,",
+				"          {toInteger(VIOLATION_CATEGORY_ID)} = VIOLATION_CATEGORY_ID,",
+				"          VIOLATION_CATEGORY,",
+				"          LATITUDE,",
+				"          LONGITUDE,",
+				"          RISK_LEVEL,",
+				"          INSPECTION_RESULT",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectDallas",
+				"surrogateKey1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          DBA_NAME as string,",
+				"          AKA_NAME as string,",
+				"          FACILITY_TYPE as string,",
+				"          INSPECTION_ID as string,",
+				"          INSPECTION_TYPE as string,",
+				"          INSPECTION_RESULT as string,",
+				"          INSPECTION_DATE as date,",
+				"          VIOLATION_CATEGORY_ID as decimal(38,0),",
+				"          VIOLATION_CATEGORY as string,",
+				"          VIOLATION_DESCRIPTION as string,",
+				"          RISK_LEVEL as string,",
+				"          LATITUDE as double,",
+				"          LONGITUDE as double,",
+				"          ZIP_CODE as string,",
+				"          CITY as string,",
+				"          STATE as string,",
+				"          ADDRESS as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true) ~> STGFoodInspection"
+			]
+		}
+	}
+}
