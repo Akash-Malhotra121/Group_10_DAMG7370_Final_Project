@@ -189,6 +189,7 @@
 				"          AKA_NAME,",
 				"          FACILITY_TYPE,",
 				"          INSPECTION_ID,",
+				"          INSPECTION_SK,",
 				"          INSPECTION_TYPE,",
 				"          INSPECTION_RESULT,",
 				"          INSPECTION_DATE,",
@@ -201,8 +202,7 @@
 				"          ZIP_CODE,",
 				"          CITY,",
 				"          STATE,",
-				"          ADDRESS,",
-				"          INSPECTION_SK",
+				"          ADDRESS",
 				"     )) ~> STGFoodInspection"
 			]
 		}
