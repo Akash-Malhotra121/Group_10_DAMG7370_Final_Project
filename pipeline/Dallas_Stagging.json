@@ -390,6 +390,7 @@
 								],
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
@@ -442,7 +443,10 @@
 											"scripts": [
 												{
 													"type": "Query",
-													"text": "INSERT INTO FOOD_SCHEMA.FILE_LOAD_LOG (\n    file_name, status, rows_read, rows_written, rows_skipped, error_message\n)\nVALUES (\n    '@{item()}',\n    'Skipped',\n    0,\n    0,\n    0,\n    'File is blank or does not exist'\n);\n"
+													"text": {
+														"value": "INSERT INTO FOOD_SCHEMA.FILE_LOAD_LOG (\n    file_name, status, rows_read, rows_written, rows_skipped, error_message\n)\nVALUES (\n    '@{item()}',\n    'Skipped',\n    0,\n    0,\n    0,\n    'File is blank or does not exist'\n);\n",
+														"type": "Expression"
+													}
 												}
 											],
 											"scriptBlockExecutionTimeout": "02:00:00"
