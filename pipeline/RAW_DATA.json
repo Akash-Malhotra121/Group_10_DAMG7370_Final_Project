@@ -5,6 +5,8 @@
 			{
 				"name": "ForEach1",
 				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
@@ -296,6 +298,1582 @@
 									"type": "DatasetReference"
 								}
 							]
+						},
+						{
+							"name": "Get Metadata2",
+							"type": "GetMetadata",
+							"dependsOn": [
+								{
+									"activity": "CHICAGO",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.00:30:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "CHICAGO_PARQ",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								},
+								"fieldList": [
+									"size"
+								],
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							}
+						},
+						{
+							"name": "If Condition2",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Get Metadata2",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@greater(activity('Get Metadata2').output.size, 100)\n",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Copy data1",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.00:30:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "ParquetSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": false,
+													"enablePartitionDiscovery": false
+												},
+												"formatSettings": {
+													"type": "ParquetReadSettings"
+												}
+											},
+											"sink": {
+												"type": "ParquetSink",
+												"storeSettings": {
+													"type": "AzureBlobFSWriteSettings",
+													"copyBehavior": "FlattenHierarchy"
+												},
+												"formatSettings": {
+													"type": "ParquetWriteSettings"
+												}
+											},
+											"enableStaging": true,
+											"stagingSettings": {
+												"linkedServiceName": {
+													"referenceName": "stgblob",
+													"type": "LinkedServiceReference"
+												},
+												"path": "foodstg"
+											},
+											"logSettings": {
+												"enableCopyActivityLog": true,
+												"copyActivityLogSettings": {
+													"logLevel": "Warning",
+													"enableReliableLogging": false
+												},
+												"logLocationSettings": {
+													"linkedServiceName": {
+														"referenceName": "stgblob",
+														"type": "LinkedServiceReference"
+													},
+													"path": "quarantine"
+												}
+											},
+											"translator": {
+												"type": "TabularTranslator",
+												"mappings": [
+													{
+														"source": {
+															"name": "Inspection_ID",
+															"type": "Int32",
+															"physicalType": "INT32"
+														},
+														"sink": {
+															"name": "INSPECTION_ID",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "DBA_Name",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "DBA_NAME",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "AKA_Name",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "AKA_NAME",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "License_Number",
+															"type": "Double",
+															"physicalType": "DOUBLE"
+														},
+														"sink": {
+															"name": "LICENSE_NUMBER",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Facility_Type",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "FACILITY_TYPE",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Risk",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "RISK",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Address",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "ADDRESS",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "City",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "CITY",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "State",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "STATE",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Zip",
+															"type": "Double",
+															"physicalType": "DOUBLE"
+														},
+														"sink": {
+															"name": "ZIP",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Inspection_Date",
+															"type": "DateTime",
+															"physicalType": "DATE"
+														},
+														"sink": {
+															"name": "INSPECTION_DATE",
+															"type": "DateTime",
+															"physicalType": "DATE"
+														}
+													},
+													{
+														"source": {
+															"name": "Inspection_Type",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "INSPECTION_TYPE",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Results",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "RESULTS",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Violations",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "VIOLATIONS",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Latitude",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "LATITUDE",
+															"type": "Double",
+															"physicalType": "FLOAT"
+														}
+													},
+													{
+														"source": {
+															"name": "Longitude",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "LONGITUDE",
+															"type": "Double",
+															"physicalType": "FLOAT"
+														}
+													},
+													{
+														"source": {
+															"name": "Location",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "LOCATION",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Violation_Category_ID",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "VIOLATION_CATEGORY_ID",
+															"type": "Int64",
+															"physicalType": "NUMBER",
+															"scale": 0,
+															"precision": 38
+														}
+													},
+													{
+														"source": {
+															"name": "Violation_Category",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "VIOLATION_CATEGORY",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Violation_Comment",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "VIOLATION_COMMENT",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Risk_Level_Number",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "RISK_LEVEL_NUMBER",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Risk_Level",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "RISK_LEVEL",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													}
+												],
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "CHICAGO_PARQ",
+												"type": "DatasetReference",
+												"parameters": {
+													"FileName": {
+														"value": "@item()\n",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "ERRORFILE",
+												"type": "DatasetReference"
+											}
+										]
+									},
+									{
+										"name": "Script1",
+										"type": "Script",
+										"dependsOn": [
+											{
+												"activity": "Copy data1",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"linkedServiceName": {
+											"referenceName": "Snowflake_FOOD_INS",
+											"type": "LinkedServiceReference"
+										},
+										"typeProperties": {
+											"scripts": [
+												{
+													"type": "Query",
+													"text": "INSERT INTO FILE_LOAD_LOG (\n    file_name, status, rows_read, rows_written, rows_skipped, error_message\n)\nVALUES (\n    '@{item()}',\n    'Skipped',\n    0,\n    0,\n    0,\n    'File is blank or does not exist'\n);\n"
+												}
+											],
+											"scriptBlockExecutionTimeout": "02:00:00"
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "Copy data2",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "ParquetSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": false,
+													"enablePartitionDiscovery": false
+												},
+												"formatSettings": {
+													"type": "ParquetReadSettings"
+												}
+											},
+											"sink": {
+												"type": "SnowflakeV2Sink",
+												"importSettings": {
+													"type": "SnowflakeImportCopyCommand"
+												}
+											},
+											"enableStaging": true,
+											"stagingSettings": {
+												"linkedServiceName": {
+													"referenceName": "stgblob",
+													"type": "LinkedServiceReference"
+												},
+												"path": "foodstg"
+											},
+											"logSettings": {
+												"enableCopyActivityLog": true,
+												"copyActivityLogSettings": {
+													"logLevel": "Warning",
+													"enableReliableLogging": false
+												},
+												"logLocationSettings": {
+													"linkedServiceName": {
+														"referenceName": "stgblob",
+														"type": "LinkedServiceReference"
+													},
+													"path": "foodstg"
+												}
+											},
+											"translator": {
+												"type": "TabularTranslator",
+												"mappings": [
+													{
+														"source": {
+															"name": "Inspection_ID",
+															"type": "Int32"
+														},
+														"sink": {
+															"name": "INSPECTION_ID",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "DBA_Name",
+															"type": "String"
+														},
+														"sink": {
+															"name": "DBA_NAME",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "AKA_Name",
+															"type": "String"
+														},
+														"sink": {
+															"name": "AKA_NAME",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "License_Number",
+															"type": "Double"
+														},
+														"sink": {
+															"name": "LICENSE_NUMBER",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Facility_Type",
+															"type": "String"
+														},
+														"sink": {
+															"name": "FACILITY_TYPE",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Risk",
+															"type": "String"
+														},
+														"sink": {
+															"name": "RISK",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Address",
+															"type": "String"
+														},
+														"sink": {
+															"name": "ADDRESS",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "City",
+															"type": "String"
+														},
+														"sink": {
+															"name": "CITY",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "State",
+															"type": "String"
+														},
+														"sink": {
+															"name": "STATE",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Zip",
+															"type": "Double"
+														},
+														"sink": {
+															"name": "ZIP",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Inspection_Date",
+															"type": "DateTime"
+														},
+														"sink": {
+															"name": "INSPECTION_DATE",
+															"type": "DateTime"
+														}
+													},
+													{
+														"source": {
+															"name": "Inspection_Type",
+															"type": "String"
+														},
+														"sink": {
+															"name": "INSPECTION_TYPE",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Results",
+															"type": "String"
+														},
+														"sink": {
+															"name": "RESULTS",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Violations",
+															"type": "String"
+														},
+														"sink": {
+															"name": "VIOLATIONS",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Latitude",
+															"type": "String"
+														},
+														"sink": {
+															"name": "LATITUDE",
+															"type": "Double"
+														}
+													},
+													{
+														"source": {
+															"name": "Longitude",
+															"type": "String"
+														},
+														"sink": {
+															"name": "LONGITUDE",
+															"type": "Double"
+														}
+													},
+													{
+														"source": {
+															"name": "Location",
+															"type": "String"
+														},
+														"sink": {
+															"name": "LOCATION",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Violation_Category_ID",
+															"type": "String"
+														},
+														"sink": {
+															"name": "VIOLATION_CATEGORY_ID",
+															"type": "Int64"
+														}
+													},
+													{
+														"source": {
+															"name": "Violation_Category",
+															"type": "String"
+														},
+														"sink": {
+															"name": "VIOLATION_CATEGORY",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Violation_Comment",
+															"type": "String"
+														},
+														"sink": {
+															"name": "VIOLATION_COMMENT",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Risk_Level_Number",
+															"type": "String"
+														},
+														"sink": {
+															"name": "RISK_LEVEL_NUMBER",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Risk_Level",
+															"type": "String"
+														},
+														"sink": {
+															"name": "RISK_LEVEL",
+															"type": "String"
+														}
+													}
+												]
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "CHICAGO_PARQ",
+												"type": "DatasetReference",
+												"parameters": {
+													"FileName": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "SnowflakeCHICAGO",
+												"type": "DatasetReference"
+											}
+										]
+									},
+									{
+										"name": "Script2",
+										"type": "Script",
+										"dependsOn": [
+											{
+												"activity": "Copy data2",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"linkedServiceName": {
+											"referenceName": "Snowflake_FOOD_INS",
+											"type": "LinkedServiceReference"
+										},
+										"typeProperties": {
+											"scripts": [
+												{
+													"type": "Query",
+													"text": {
+														"value": "INSERT INTO FILE_LOAD_LOG (\n    file_name, status, rows_read, rows_written, rows_skipped, error_message\n)\nVALUES (\n    '@{item()}',\n    'Success',\n    @{activity('Copy data2').output.rowsRead},\n    @{activity('Copy data2').output.rowsCopied},\n    @{activity('Copy data2').output.rowsSkipped},\n    NULL\n);\n",
+														"type": "Expression"
+													}
+												}
+											],
+											"scriptBlockExecutionTimeout": "02:00:00"
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "ForEach1_copy1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.FILENAME_LIST",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Get Metadata",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.00:30:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "CHICAGO_PARQ",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								},
+								"fieldList": [
+									"size"
+								],
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							}
+						},
+						{
+							"name": "If Condition2_copy1",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Get Metadata",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@greater(activity('Get Metadata').output.size, 100)\n",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Copy failed",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.00:30:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "ParquetSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": false,
+													"enablePartitionDiscovery": false
+												},
+												"formatSettings": {
+													"type": "ParquetReadSettings"
+												}
+											},
+											"sink": {
+												"type": "ParquetSink",
+												"storeSettings": {
+													"type": "AzureBlobFSWriteSettings",
+													"copyBehavior": "FlattenHierarchy"
+												},
+												"formatSettings": {
+													"type": "ParquetWriteSettings"
+												}
+											},
+											"enableStaging": true,
+											"stagingSettings": {
+												"linkedServiceName": {
+													"referenceName": "stgblob",
+													"type": "LinkedServiceReference"
+												},
+												"path": "foodstg"
+											},
+											"logSettings": {
+												"enableCopyActivityLog": true,
+												"copyActivityLogSettings": {
+													"logLevel": "Warning",
+													"enableReliableLogging": false
+												},
+												"logLocationSettings": {
+													"linkedServiceName": {
+														"referenceName": "stgblob",
+														"type": "LinkedServiceReference"
+													},
+													"path": "quarantine"
+												}
+											},
+											"translator": {
+												"type": "TabularTranslator",
+												"mappings": [
+													{
+														"source": {
+															"name": "Inspection_ID",
+															"type": "Int32",
+															"physicalType": "INT32"
+														},
+														"sink": {
+															"name": "INSPECTION_ID",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "DBA_Name",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "DBA_NAME",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "AKA_Name",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "AKA_NAME",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "License_Number",
+															"type": "Double",
+															"physicalType": "DOUBLE"
+														},
+														"sink": {
+															"name": "LICENSE_NUMBER",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Facility_Type",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "FACILITY_TYPE",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Risk",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "RISK",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Address",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "ADDRESS",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "City",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "CITY",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "State",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "STATE",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Zip",
+															"type": "Double",
+															"physicalType": "DOUBLE"
+														},
+														"sink": {
+															"name": "ZIP",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Inspection_Date",
+															"type": "DateTime",
+															"physicalType": "DATE"
+														},
+														"sink": {
+															"name": "INSPECTION_DATE",
+															"type": "DateTime",
+															"physicalType": "DATE"
+														}
+													},
+													{
+														"source": {
+															"name": "Inspection_Type",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "INSPECTION_TYPE",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Results",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "RESULTS",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Violations",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "VIOLATIONS",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Latitude",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "LATITUDE",
+															"type": "Double",
+															"physicalType": "FLOAT"
+														}
+													},
+													{
+														"source": {
+															"name": "Longitude",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "LONGITUDE",
+															"type": "Double",
+															"physicalType": "FLOAT"
+														}
+													},
+													{
+														"source": {
+															"name": "Location",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "LOCATION",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Violation_Category_ID",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "VIOLATION_CATEGORY_ID",
+															"type": "Int64",
+															"physicalType": "NUMBER",
+															"scale": 0,
+															"precision": 38
+														}
+													},
+													{
+														"source": {
+															"name": "Violation_Category",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "VIOLATION_CATEGORY",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Violation_Comment",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "VIOLATION_COMMENT",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Risk_Level_Number",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "RISK_LEVEL_NUMBER",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													},
+													{
+														"source": {
+															"name": "Risk_Level",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "RISK_LEVEL",
+															"type": "String",
+															"physicalType": "VARCHAR"
+														}
+													}
+												],
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "CHICAGO_PARQ",
+												"type": "DatasetReference",
+												"parameters": {
+													"FileName": {
+														"value": "@item()\n",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "ERRORFILE",
+												"type": "DatasetReference"
+											}
+										]
+									},
+									{
+										"name": "Script1_copy1",
+										"type": "Script",
+										"dependsOn": [
+											{
+												"activity": "Copy failed",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"linkedServiceName": {
+											"referenceName": "Snowflake_FOOD_INS",
+											"type": "LinkedServiceReference"
+										},
+										"typeProperties": {
+											"scripts": [
+												{
+													"type": "Query",
+													"text": {
+														"value": "INSERT INTO FOOD_SCHEMA.FILE_LOAD_LOG (\n    file_name, status, rows_read, rows_written, rows_skipped, error_message\n)\nVALUES (\n    '@{item()}',\n    'Skipped',\n    0,\n    0,\n    0,\n    'File is blank or does not exist'\n);\n",
+														"type": "Expression"
+													}
+												}
+											],
+											"scriptBlockExecutionTimeout": "02:00:00"
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "Copy success",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "ParquetSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": false,
+													"enablePartitionDiscovery": false
+												},
+												"formatSettings": {
+													"type": "ParquetReadSettings"
+												}
+											},
+											"sink": {
+												"type": "SnowflakeV2Sink",
+												"importSettings": {
+													"type": "SnowflakeImportCopyCommand"
+												}
+											},
+											"enableStaging": true,
+											"stagingSettings": {
+												"linkedServiceName": {
+													"referenceName": "stgblob",
+													"type": "LinkedServiceReference"
+												},
+												"path": "foodstg"
+											},
+											"logSettings": {
+												"enableCopyActivityLog": true,
+												"copyActivityLogSettings": {
+													"logLevel": "Warning",
+													"enableReliableLogging": false
+												},
+												"logLocationSettings": {
+													"linkedServiceName": {
+														"referenceName": "stgblob",
+														"type": "LinkedServiceReference"
+													},
+													"path": "foodstg"
+												}
+											},
+											"translator": {
+												"type": "TabularTranslator",
+												"mappings": [
+													{
+														"source": {
+															"name": "Inspection_ID",
+															"type": "Int32"
+														},
+														"sink": {
+															"name": "INSPECTION_ID",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "DBA_Name",
+															"type": "String"
+														},
+														"sink": {
+															"name": "DBA_NAME",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "AKA_Name",
+															"type": "String"
+														},
+														"sink": {
+															"name": "AKA_NAME",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "License_Number",
+															"type": "Double"
+														},
+														"sink": {
+															"name": "LICENSE_NUMBER",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Facility_Type",
+															"type": "String"
+														},
+														"sink": {
+															"name": "FACILITY_TYPE",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Risk",
+															"type": "String"
+														},
+														"sink": {
+															"name": "RISK",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Address",
+															"type": "String"
+														},
+														"sink": {
+															"name": "ADDRESS",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "City",
+															"type": "String"
+														},
+														"sink": {
+															"name": "CITY",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "State",
+															"type": "String"
+														},
+														"sink": {
+															"name": "STATE",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Zip",
+															"type": "Double"
+														},
+														"sink": {
+															"name": "ZIP",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Inspection_Date",
+															"type": "DateTime"
+														},
+														"sink": {
+															"name": "INSPECTION_DATE",
+															"type": "DateTime"
+														}
+													},
+													{
+														"source": {
+															"name": "Inspection_Type",
+															"type": "String"
+														},
+														"sink": {
+															"name": "INSPECTION_TYPE",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Results",
+															"type": "String"
+														},
+														"sink": {
+															"name": "RESULTS",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Violations",
+															"type": "String"
+														},
+														"sink": {
+															"name": "VIOLATIONS",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Latitude",
+															"type": "String"
+														},
+														"sink": {
+															"name": "LATITUDE",
+															"type": "Double"
+														}
+													},
+													{
+														"source": {
+															"name": "Longitude",
+															"type": "String"
+														},
+														"sink": {
+															"name": "LONGITUDE",
+															"type": "Double"
+														}
+													},
+													{
+														"source": {
+															"name": "Location",
+															"type": "String"
+														},
+														"sink": {
+															"name": "LOCATION",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Violation_Category_ID",
+															"type": "String"
+														},
+														"sink": {
+															"name": "VIOLATION_CATEGORY_ID",
+															"type": "Int64"
+														}
+													},
+													{
+														"source": {
+															"name": "Violation_Category",
+															"type": "String"
+														},
+														"sink": {
+															"name": "VIOLATION_CATEGORY",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Violation_Comment",
+															"type": "String"
+														},
+														"sink": {
+															"name": "VIOLATION_COMMENT",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Risk_Level_Number",
+															"type": "String"
+														},
+														"sink": {
+															"name": "RISK_LEVEL_NUMBER",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Risk_Level",
+															"type": "String"
+														},
+														"sink": {
+															"name": "RISK_LEVEL",
+															"type": "String"
+														}
+													}
+												]
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "CHICAGO_PARQ",
+												"type": "DatasetReference",
+												"parameters": {
+													"FileName": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "SnowflakeCHICAGO",
+												"type": "DatasetReference"
+											}
+										]
+									},
+									{
+										"name": "Script2_copy1",
+										"type": "Script",
+										"dependsOn": [
+											{
+												"activity": "Copy success",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"linkedServiceName": {
+											"referenceName": "Snowflake_FOOD_INS",
+											"type": "LinkedServiceReference"
+										},
+										"typeProperties": {
+											"scripts": [
+												{
+													"type": "Query",
+													"text": {
+														"value": "INSERT INTO FOOD_SCHEMA.FILE_LOAD_LOG (\n    file_name, status, rows_read, rows_written, rows_skipped, error_message\n)\nVALUES (\n    '@{item()}',\n    'Success',\n    @{activity('Copy success').output.rowsRead},\n    @{activity('Copy success').output.rowsCopied},\n    @{activity('Copy success').output.rowsSkipped},\n    NULL\n);\n",
+														"type": "Expression"
+													}
+												}
+											],
+											"scriptBlockExecutionTimeout": "02:00:00"
+										}
+									}
+								]
+							}
 						}
 					]
 				}
