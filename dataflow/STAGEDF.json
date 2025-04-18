@@ -185,9 +185,27 @@
 				"     updateable:false,",
 				"     upsertable:false,",
 				"     format: 'table',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     stageInsert: true) ~> STGFoodInspection"
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          DBA_NAME,",
+				"          AKA_NAME,",
+				"          FACILITY_TYPE,",
+				"          INSPECTION_ID,",
+				"          INSPECTION_TYPE,",
+				"          INSPECTION_RESULT,",
+				"          INSPECTION_DATE,",
+				"          VIOLATION_CATEGORY_ID,",
+				"          VIOLATION_CATEGORY,",
+				"          VIOLATION_DESCRIPTION,",
+				"          RISK_LEVEL,",
+				"          LATITUDE,",
+				"          LONGITUDE,",
+				"          ZIP_CODE,",
+				"          CITY,",
+				"          STATE,",
+				"          ADDRESS,",
+				"          Inspection_SK",
+				"     )) ~> STGFoodInspection"
 			]
 		}
 	}
