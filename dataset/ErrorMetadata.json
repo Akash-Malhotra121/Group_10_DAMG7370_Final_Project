@@ -1,0 +1,19 @@
+{
+	"name": "ErrorMetadata",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorageGP",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "quarantine"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
