@@ -201,8 +201,7 @@
 				"          ZIP_CODE,",
 				"          CITY,",
 				"          STATE,",
-				"          ADDRESS,",
-				"          Inspection_SK",
+				"          ADDRESS",
 				"     )) ~> STGFoodInspection"
 			]
 		}
