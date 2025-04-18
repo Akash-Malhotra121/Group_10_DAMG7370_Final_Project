@@ -1,5 +1,5 @@
 {
-	"name": "CHICAGO_RAW",
+	"name": "CHICAGO_basic",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorageGP",
@@ -16,15 +16,15 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@concat(dataset().FileName,'.tsv')\n",
+					"value": "@concat(dataset().FileName,'.parquet')\n",
 					"type": "Expression"
 				},
 				"fileSystem": "bronzefood"
 			},
 			"columnDelimiter": "\t",
-			"escapeChar": "",
+			"escapeChar": "\\",
 			"firstRowAsHeader": true,
-			"quoteChar": ""
+			"quoteChar": "\""
 		},
 		"schema": []
 	}
