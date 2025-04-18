@@ -43,6 +43,9 @@
 				},
 				{
 					"name": "selectDallas"
+				},
+				{
+					"name": "convertViolationCategoryId"
 				}
 			],
 			"scriptLines": [
@@ -132,7 +135,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectChicago",
-				"selectChicago, selectDallas union(byName: true)~> unionCD",
+				"selectChicago, convertViolationCategoryId union(byName: true)~> unionCD",
 				"STGDFDallas select(mapColumn(",
 				"          INSPECTION_ID,",
 				"          DBA_NAME = RESTAURANT_NAME,",
@@ -145,7 +148,7 @@
 				"          STATE,",
 				"          FACILITY_TYPE,",
 				"          CITY,",
-				"          {toInteger(VIOLATION_CATEGORY_ID)} = VIOLATION_CATEGORY_ID,",
+				"          VIOLATION_CATEGORY_ID,",
 				"          VIOLATION_CATEGORY,",
 				"          LATITUDE,",
 				"          LONGITUDE,",
@@ -154,6 +157,8 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectDallas",
+				"selectDallas derive(VIOLATION_CATEGORY_ID = toInteger(VIOLATION_CATEGORY_ID)\r",
+				") ~> convertViolationCategoryId",
 				"surrogateKey1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
