@@ -46,6 +46,9 @@
 				},
 				{
 					"name": "convertViolationCategoryId"
+				},
+				{
+					"name": "aggregate1"
 				}
 			],
 			"scriptLines": [
@@ -109,7 +112,7 @@
 				"     validateSchema: false,",
 				"     format: 'table') ~> STGDFDallas",
 				"unionCD derive(RISK_LEVEL = iif(isNull(RISK_LEVEL), 'Unknown', RISK_LEVEL)) ~> derivedColumn1",
-				"derivedColumn1 keyGenerate(output(INSPECTION_SK as long),",
+				"aggregate1 keyGenerate(output(INSPECTION_SK as long),",
 				"     startAt: 1L,",
 				"     stepValue: 1L) ~> surrogateKey1",
 				"STGDFChicago select(mapColumn(",
@@ -156,6 +159,24 @@
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> selectDallas",
 				"selectDallas derive(VIOLATION_CATEGORY_ID = toInteger(VIOLATION_CATEGORY_ID)) ~> convertViolationCategoryId",
+				"derivedColumn1 aggregate(groupBy(INSPECTION_ID,",
+				"          DBA_NAME,",
+				"          AKA_NAME,",
+				"          LONGITUDE,",
+				"          FACILITY_TYPE,",
+				"          ADDRESS,",
+				"          CITY,",
+				"          STATE,",
+				"          ZIP_CODE,",
+				"          INSPECTION_DATE,",
+				"          INSPECTION_TYPE,",
+				"          INSPECTION_RESULT,",
+				"          LATITUDE,",
+				"          VIOLATION_CATEGORY_ID,",
+				"          VIOLATION_CATEGORY,",
+				"          VIOLATION_DESCRIPTION,",
+				"          RISK_LEVEL),",
+				"     INSPECTION_ID_2 = count(INSPECTION_ID)) ~> aggregate1",
 				"surrogateKey1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
