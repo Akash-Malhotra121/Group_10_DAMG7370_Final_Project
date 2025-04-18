@@ -480,6 +480,20 @@
 												}
 											},
 											"enableStaging": false,
+											"logSettings": {
+												"enableCopyActivityLog": true,
+												"copyActivityLogSettings": {
+													"logLevel": "Warning",
+													"enableReliableLogging": false
+												},
+												"logLocationSettings": {
+													"linkedServiceName": {
+														"referenceName": "StaggingTable",
+														"type": "LinkedServiceReference"
+													},
+													"path": "staggingsnowflake"
+												}
+											},
 											"translator": {
 												"type": "TabularTranslator",
 												"mappings": [
