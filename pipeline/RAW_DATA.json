@@ -27,23 +27,20 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "DelimitedTextSource",
+									"type": "ParquetSource",
 									"storeSettings": {
 										"type": "AzureBlobFSReadSettings",
 										"recursive": false,
 										"enablePartitionDiscovery": false
 									},
 									"formatSettings": {
-										"type": "DelimitedTextReadSettings"
+										"type": "ParquetReadSettings"
 									}
 								},
 								"sink": {
 									"type": "SnowflakeV2Sink",
 									"importSettings": {
-										"type": "SnowflakeImportCopyCommand",
-										"additionalCopyOptions": {
-											"ON_ERROR": "CONTINUE"
-										}
+										"type": "SnowflakeImportCopyCommand"
 									}
 								},
 								"enableStaging": true,
@@ -54,23 +51,23 @@
 									},
 									"path": "foodstg"
 								},
-								"enableSkipIncompatibleRow": true,
+								"enableSkipIncompatibleRow": false,
 								"translator": {
 									"type": "TabularTranslator",
 									"mappings": [
 										{
 											"source": {
-												"name": "Inspection ID",
-												"type": "String"
+												"name": "Inspection_ID",
+												"type": "Int32"
 											},
 											"sink": {
 												"name": "INSPECTION_ID",
-												"type": "Int64"
+												"type": "String"
 											}
 										},
 										{
 											"source": {
-												"name": "DBA Name",
+												"name": "DBA_Name",
 												"type": "String"
 											},
 											"sink": {
@@ -80,7 +77,7 @@
 										},
 										{
 											"source": {
-												"name": "AKA Name",
+												"name": "AKA_Name",
 												"type": "String"
 											},
 											"sink": {
@@ -90,17 +87,17 @@
 										},
 										{
 											"source": {
-												"name": "License #",
-												"type": "String"
+												"name": "License_Number",
+												"type": "Double"
 											},
 											"sink": {
 												"name": "LICENSE_NUMBER",
-												"type": "Double"
+												"type": "String"
 											}
 										},
 										{
 											"source": {
-												"name": "Facility Type",
+												"name": "Facility_Type",
 												"type": "String"
 											},
 											"sink": {
@@ -151,17 +148,17 @@
 										{
 											"source": {
 												"name": "Zip",
-												"type": "String"
+												"type": "Double"
 											},
 											"sink": {
 												"name": "ZIP",
-												"type": "Double"
+												"type": "String"
 											}
 										},
 										{
 											"source": {
-												"name": "Inspection Date",
-												"type": "String"
+												"name": "Inspection_Date",
+												"type": "DateTime"
 											},
 											"sink": {
 												"name": "INSPECTION_DATE",
@@ -170,7 +167,7 @@
 										},
 										{
 											"source": {
-												"name": "Inspection Type",
+												"name": "Inspection_Type",
 												"type": "String"
 											},
 											"sink": {
@@ -205,7 +202,7 @@
 											},
 											"sink": {
 												"name": "LATITUDE",
-												"type": "String"
+												"type": "Double"
 											}
 										},
 										{
@@ -215,7 +212,7 @@
 											},
 											"sink": {
 												"name": "LONGITUDE",
-												"type": "String"
+												"type": "Double"
 											}
 										},
 										{
@@ -227,13 +224,63 @@
 												"name": "LOCATION",
 												"type": "String"
 											}
+										},
+										{
+											"source": {
+												"name": "Violation_Category_ID",
+												"type": "String"
+											},
+											"sink": {
+												"name": "VIOLATION_CATEGORY_ID",
+												"type": "Int64"
+											}
+										},
+										{
+											"source": {
+												"name": "Violation_Category",
+												"type": "String"
+											},
+											"sink": {
+												"name": "VIOLATION_CATEGORY",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Violation_Comment",
+												"type": "String"
+											},
+											"sink": {
+												"name": "VIOLATION_COMMENT",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Risk_Level_Number",
+												"type": "String"
+											},
+											"sink": {
+												"name": "RISK_LEVEL_NUMBER",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Risk_Level",
+												"type": "String"
+											},
+											"sink": {
+												"name": "RISK_LEVEL",
+												"type": "String"
+											}
 										}
 									]
 								}
 							},
 							"inputs": [
 								{
-									"referenceName": "CHICAGO_RAW",
+									"referenceName": "CHICAGO_PARQ",
 									"type": "DatasetReference",
 									"parameters": {
 										"FileName": {

@@ -81,7 +81,7 @@
 		],
 		"typeProperties": {
 			"schema": "FOOD_SCHEMA",
-			"table": "CHICAGO_RAW"
+			"table": "STG_CHICAGO"
 		}
 	}
 }
