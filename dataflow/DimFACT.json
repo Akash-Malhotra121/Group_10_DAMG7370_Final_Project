@@ -1,0 +1,19 @@
+{
+	"name": "DimFACT",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "SourceSTGFood"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> SourceSTGFood"
+			]
+		}
+	}
+}
