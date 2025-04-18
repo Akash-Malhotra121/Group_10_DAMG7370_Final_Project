@@ -201,7 +201,7 @@
 				"          CITY,",
 				"          STATE,",
 				"          ADDRESS,",
-				"          Inspection_SK = INSPECTION_SK",
+				"          INSPECTION_SK",
 				"     )) ~> STGFoodInspection"
 			]
 		}
