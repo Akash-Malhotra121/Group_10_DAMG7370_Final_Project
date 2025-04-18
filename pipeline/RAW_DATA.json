@@ -40,10 +40,196 @@
 								"sink": {
 									"type": "SnowflakeV2Sink",
 									"importSettings": {
-										"type": "SnowflakeImportCopyCommand"
+										"type": "SnowflakeImportCopyCommand",
+										"additionalCopyOptions": {
+											"ON_ERROR": "CONTINUE"
+										}
 									}
 								},
-								"enableStaging": false
+								"enableStaging": true,
+								"stagingSettings": {
+									"linkedServiceName": {
+										"referenceName": "stgblob",
+										"type": "LinkedServiceReference"
+									},
+									"path": "foodstg"
+								},
+								"enableSkipIncompatibleRow": true,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "Inspection ID",
+												"type": "String"
+											},
+											"sink": {
+												"name": "INSPECTION_ID",
+												"type": "Int64"
+											}
+										},
+										{
+											"source": {
+												"name": "DBA Name",
+												"type": "String"
+											},
+											"sink": {
+												"name": "DBA_NAME",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "AKA Name",
+												"type": "String"
+											},
+											"sink": {
+												"name": "AKA_NAME",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "License #",
+												"type": "String"
+											},
+											"sink": {
+												"name": "LICENSE_NUMBER",
+												"type": "Double"
+											}
+										},
+										{
+											"source": {
+												"name": "Facility Type",
+												"type": "String"
+											},
+											"sink": {
+												"name": "FACILITY_TYPE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Risk",
+												"type": "String"
+											},
+											"sink": {
+												"name": "RISK",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Address",
+												"type": "String"
+											},
+											"sink": {
+												"name": "ADDRESS",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "City",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CITY",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "State",
+												"type": "String"
+											},
+											"sink": {
+												"name": "STATE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Zip",
+												"type": "String"
+											},
+											"sink": {
+												"name": "ZIP",
+												"type": "Double"
+											}
+										},
+										{
+											"source": {
+												"name": "Inspection Date",
+												"type": "String"
+											},
+											"sink": {
+												"name": "INSPECTION_DATE",
+												"type": "DateTime"
+											}
+										},
+										{
+											"source": {
+												"name": "Inspection Type",
+												"type": "String"
+											},
+											"sink": {
+												"name": "INSPECTION_TYPE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Results",
+												"type": "String"
+											},
+											"sink": {
+												"name": "RESULTS",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Violations",
+												"type": "String"
+											},
+											"sink": {
+												"name": "VIOLATIONS",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Latitude",
+												"type": "String"
+											},
+											"sink": {
+												"name": "LATITUDE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Longitude",
+												"type": "String"
+											},
+											"sink": {
+												"name": "LONGITUDE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Location",
+												"type": "String"
+											},
+											"sink": {
+												"name": "LOCATION",
+												"type": "String"
+											}
+										}
+									]
+								}
 							},
 							"inputs": [
 								{
