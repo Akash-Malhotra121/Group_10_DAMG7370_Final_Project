@@ -163,6 +163,7 @@
 				"          AKA_NAME as string,",
 				"          FACILITY_TYPE as string,",
 				"          INSPECTION_ID as string,",
+				"          INSPECTION_SK as decimal(38,0),",
 				"          INSPECTION_TYPE as string,",
 				"          INSPECTION_RESULT as string,",
 				"          INSPECTION_DATE as date,",

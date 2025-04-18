@@ -25,6 +25,12 @@
 				"type": "VARCHAR"
 			},
 			{
+				"name": "INSPECTION_SK",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
 				"name": "INSPECTION_TYPE",
 				"type": "VARCHAR"
 			},
