@@ -1,0 +1,130 @@
+{
+	"name": "DimDATE",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "STGFoodInspection",
+						"type": "DatasetReference"
+					},
+					"name": "sourceSTG"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeDATEdIM",
+						"type": "DatasetReference"
+					},
+					"name": "DATEDIM"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "surrogateKey1"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     JOB_ID as string (\"11\")",
+				"}",
+				"source(output(",
+				"          DBA_NAME as string,",
+				"          AKA_NAME as string,",
+				"          FACILITY_TYPE as string,",
+				"          INSPECTION_ID as string,",
+				"          INSPECTION_SK as decimal(38,0),",
+				"          INSPECTION_TYPE as string,",
+				"          INSPECTION_RESULT as string,",
+				"          INSPECTION_DATE as date,",
+				"          VIOLATION_CATEGORY_ID as decimal(38,0),",
+				"          VIOLATION_CATEGORY as string,",
+				"          VIOLATION_DESCRIPTION as string,",
+				"          RISK_LEVEL as string,",
+				"          LATITUDE as double,",
+				"          LONGITUDE as double,",
+				"          ZIP_CODE as string,",
+				"          CITY as string,",
+				"          STATE as string,",
+				"          ADDRESS as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceSTG",
+				"sourceSTG select(mapColumn(",
+				"          INSPECTION_DATE",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select1",
+				"select1 derive(DT = INSPECTION_DATE,",
+				"          DAY_NAME = iif(dayOfWeek(INSPECTION_DATE) == 0, 'Sunday',\r",
+				"iif(dayOfWeek(INSPECTION_DATE) == 1, 'Monday',\r",
+				"iif(dayOfWeek(INSPECTION_DATE) == 2, 'Tuesday',\r",
+				"iif(dayOfWeek(INSPECTION_DATE) == 3, 'Wednesday',\r",
+				"iif(dayOfWeek(INSPECTION_DATE) == 4, 'Thursday',\r",
+				"iif(dayOfWeek(INSPECTION_DATE) == 5, 'Friday',\r",
+				"'Saturday'))))))\r",
+				",",
+				"          DAY_ABBR = iif(dayOfWeek(INSPECTION_DATE) == 0, 'Sun', iif(dayOfWeek(INSPECTION_DATE) == 1, 'Mon', iif(dayOfWeek(INSPECTION_DATE) == 2, 'Tue', iif(dayOfWeek(INSPECTION_DATE) == 3, 'Wed', iif(dayOfWeek(INSPECTION_DATE) == 4, 'Thu', iif(dayOfWeek(INSPECTION_DATE) == 5, 'Fri', 'Sat')))))),",
+				"          DAY_NUM = dayOfMonth(INSPECTION_DATE),",
+				"          MONTH_NAME = iif(month(INSPECTION_DATE) == 1, 'January', iif(month(INSPECTION_DATE) == 2, 'February', iif(month(INSPECTION_DATE) == 3, 'March', iif(month(INSPECTION_DATE) == 4, 'April', iif(month(INSPECTION_DATE) == 5, 'May', iif(month(INSPECTION_DATE) == 6, 'June', iif(month(INSPECTION_DATE) == 7, 'July', iif(month(INSPECTION_DATE) == 8, 'August', iif(month(INSPECTION_DATE) == 9, 'September', iif(month(INSPECTION_DATE) == 10, 'October', iif(month(INSPECTION_DATE) == 11, 'November', 'December'))))))))))),",
+				"          MONTH_ABBR = iif(month(INSPECTION_DATE) == 1, 'Jan', iif(month(INSPECTION_DATE) == 2, 'Feb', iif(month(INSPECTION_DATE) == 3, 'Mar', iif(month(INSPECTION_DATE) == 4, 'Apr', iif(month(INSPECTION_DATE) == 5, 'May', iif(month(INSPECTION_DATE) == 6, 'Jun', iif(month(INSPECTION_DATE) == 7, 'Jul', iif(month(INSPECTION_DATE) == 8, 'Aug', iif(month(INSPECTION_DATE) == 9, 'Sep', iif(month(INSPECTION_DATE) == 10, 'Oct', iif(month(INSPECTION_DATE) == 11, 'Nov', 'Dec'))))))))))),",
+				"          MONTH_NUM = month(INSPECTION_DATE),",
+				"          QTR_NUM = iif(month(INSPECTION_DATE) <= 3, 1, iif(month(INSPECTION_DATE) <= 6, 2, iif(month(INSPECTION_DATE) <= 9, 3, 4))),",
+				"          YEAR_NUM = year(INSPECTION_DATE),",
+				"          IS_WEEKEND = iif(dayOfWeek(INSPECTION_DATE) == 0 || dayOfWeek(INSPECTION_DATE) == 6, 1, 0),",
+				"          DI_LOAD_DT = currentDate(),",
+				"          DI_JOB_ID = $JOB_ID) ~> derivedColumn1",
+				"derivedColumn1 keyGenerate(output(DATE_SK as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> surrogateKey1",
+				"surrogateKey1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          DATE_SK as decimal(10,0),",
+				"          DAY_NAME as string,",
+				"          DAY_ABBR as string,",
+				"          DAY_NUM as decimal(2,0),",
+				"          MONTH_NAME as string,",
+				"          MONTH_ABBR as string,",
+				"          MONTH_NUM as decimal(2,0),",
+				"          QTR_NUM as decimal(2,0),",
+				"          DT as date,",
+				"          YEAR_NUM as decimal(4,0),",
+				"          IS_WEEKEND as decimal(2,0),",
+				"          DI_JOB_ID as string,",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          DATE_SK,",
+				"          DAY_NAME,",
+				"          DAY_ABBR,",
+				"          DAY_NUM,",
+				"          MONTH_NAME,",
+				"          MONTH_ABBR,",
+				"          MONTH_NUM,",
+				"          QTR_NUM,",
+				"          DT,",
+				"          YEAR_NUM,",
+				"          IS_WEEKEND,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     )) ~> DATEDIM"
+			]
+		}
+	}
+}
