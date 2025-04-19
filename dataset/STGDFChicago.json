@@ -21,10 +21,6 @@
 				"type": "VARCHAR"
 			},
 			{
-				"name": "LICENSE_NUMBER",
-				"type": "VARCHAR"
-			},
-			{
 				"name": "FACILITY_TYPE",
 				"type": "VARCHAR"
 			},
@@ -58,10 +54,6 @@
 			},
 			{
 				"name": "RESULTS",
-				"type": "VARCHAR"
-			},
-			{
-				"name": "VIOLATIONS",
 				"type": "VARCHAR"
 			},
 			{
@@ -101,6 +93,12 @@
 			{
 				"name": "RISK_LEVEL",
 				"type": "VARCHAR"
+			},
+			{
+				"name": "VIOLATION_COUNT",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
 			}
 		],
 		"typeProperties": {
