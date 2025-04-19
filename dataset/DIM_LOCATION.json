@@ -16,15 +16,11 @@
 			},
 			{
 				"name": "LATITUDE",
-				"type": "NUMBER",
-				"precision": 18,
-				"scale": 0
+				"type": "FLOAT"
 			},
 			{
 				"name": "LONGITUDE",
-				"type": "NUMBER",
-				"precision": 10,
-				"scale": 0
+				"type": "FLOAT"
 			},
 			{
 				"name": "CITY",
@@ -41,7 +37,7 @@
 			{
 				"name": "ZIP_CODE",
 				"type": "NUMBER",
-				"precision": 10,
+				"precision": 20,
 				"scale": 0
 			},
 			{
