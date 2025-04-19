@@ -95,7 +95,8 @@
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
 				"surrogateKey1 derive(DI_JOB_ID = $JOB_PARAM,",
-				"          DI_LOAD_DT = currentDate()) ~> derivedColumn1",
+				"          DI_LOAD_DT = currentDate(),",
+				"          LOCATION_SK = ERROR_FUNCTION('')) ~> derivedColumn1",
 				"join1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -114,9 +115,19 @@
 				"     updateable:false,",
 				"     upsertable:false,",
 				"     format: 'table',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     stageInsert: true) ~> sinkToDimLocation"
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          LOCATION_SK,",
+				"          LATITUDE,",
+				"          LONGITUDE,",
+				"          CITY,",
+				"          STATE,",
+				"          ADDRESS,",
+				"          ZIP_CODE,",
+				"          DI_LOAD_DT,",
+				"          DI_JOB_ID,",
+				"          MAX_LOCATION",
+				"     )) ~> sinkToDimLocation"
 			]
 		}
 	}
