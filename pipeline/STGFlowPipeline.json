@@ -31,6 +31,8 @@
 			{
 				"name": "DIMFACT",
 				"type": "ExecuteDataFlow",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.00:30:00",
@@ -42,7 +44,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "DimFACT",
+						"referenceName": "DimLOCATION",
 						"type": "DataFlowReference",
 						"parameters": {
 							"JOB_PARAM": "\"10\""

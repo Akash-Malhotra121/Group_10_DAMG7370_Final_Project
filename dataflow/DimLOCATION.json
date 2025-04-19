@@ -1,5 +1,5 @@
 {
-	"name": "DimFACT",
+	"name": "DimLOCATION",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
