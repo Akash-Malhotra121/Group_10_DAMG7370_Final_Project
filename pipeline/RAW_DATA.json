@@ -540,16 +540,6 @@
 													},
 													{
 														"source": {
-															"name": "License_Number",
-															"type": "Double"
-														},
-														"sink": {
-															"name": "LICENSE_NUMBER",
-															"type": "String"
-														}
-													},
-													{
-														"source": {
 															"name": "Facility_Type",
 															"type": "String"
 														},
@@ -611,7 +601,7 @@
 													{
 														"source": {
 															"name": "Inspection_Date",
-															"type": "DateTime"
+															"type": "String"
 														},
 														"sink": {
 															"name": "INSPECTION_DATE",
@@ -635,16 +625,6 @@
 														},
 														"sink": {
 															"name": "RESULTS",
-															"type": "String"
-														}
-													},
-													{
-														"source": {
-															"name": "Violations",
-															"type": "String"
-														},
-														"sink": {
-															"name": "VIOLATIONS",
 															"type": "String"
 														}
 													},
@@ -700,7 +680,7 @@
 													},
 													{
 														"source": {
-															"name": "Violation_Comment",
+															"name": "Violation_Comments",
 															"type": "String"
 														},
 														"sink": {
@@ -710,7 +690,7 @@
 													},
 													{
 														"source": {
-															"name": "Risk_Level_Number",
+															"name": "Risk_Number",
 															"type": "String"
 														},
 														"sink": {
@@ -726,6 +706,16 @@
 														"sink": {
 															"name": "RISK_LEVEL",
 															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Count",
+															"type": "Int64"
+														},
+														"sink": {
+															"name": "VIOLATION_COUNT",
+															"type": "Int64"
 														}
 													}
 												]
@@ -745,7 +735,7 @@
 										],
 										"outputs": [
 											{
-												"referenceName": "SnowflakeCHICAGO",
+												"referenceName": "SnowflakefoodchicAGO",
 												"type": "DatasetReference"
 											}
 										]
@@ -769,6 +759,10 @@
 											"secureInput": false
 										},
 										"userProperties": [],
+										"linkedServiceName": {
+											"referenceName": "SnowflakeFood",
+											"type": "LinkedServiceReference"
+										},
 										"typeProperties": {
 											"scripts": [
 												{
@@ -786,6 +780,35 @@
 							}
 						}
 					]
+				}
+			},
+			{
+				"name": "DIM_VIOLATION",
+				"type": "ExecuteDataFlow",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:30:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DIM_VIOLATION",
+						"type": "DataFlowReference",
+						"parameters": {
+							"JOB_ID": "\"78\""
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
 				}
 			}
 		],
