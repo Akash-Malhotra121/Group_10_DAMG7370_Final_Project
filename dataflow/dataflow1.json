@@ -1,0 +1,62 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeVIOLATION",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          DBA_NAME as string,",
+				"          AKA_NAME as string,",
+				"          FACILITY_TYPE as string,",
+				"          INSPECTION_ID as string,",
+				"          INSPECTION_SK as decimal(38,0),",
+				"          INSPECTION_TYPE as string,",
+				"          INSPECTION_RESULT as string,",
+				"          INSPECTION_DATE as date,",
+				"          VIOLATION_CATEGORY_ID as decimal(38,0),",
+				"          VIOLATION_CATEGORY as string,",
+				"          VIOLATION_DESCRIPTION as string,",
+				"          RISK_LEVEL as string,",
+				"          LATITUDE as double,",
+				"          LONGITUDE as double,",
+				"          ZIP_CODE as string,",
+				"          CITY as string,",
+				"          STATE as string,",
+				"          ADDRESS as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> source1",
+				"source1 derive() ~> derivedColumn1",
+				"derivedColumn1 select(skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
