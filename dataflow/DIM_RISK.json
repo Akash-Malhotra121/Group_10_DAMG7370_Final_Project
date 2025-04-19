@@ -1,0 +1,58 @@
+{
+	"name": "DIM_RISK",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeStagging",
+						"type": "DatasetReference"
+					},
+					"name": "sourceStaggingTable"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTableDIM",
+						"type": "DatasetReference"
+					},
+					"name": "sourceRisk"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          DBA_NAME as string,",
+				"          AKA_NAME as string,",
+				"          FACILITY_TYPE as string,",
+				"          INSPECTION_ID as string,",
+				"          INSPECTION_SK as decimal(38,0),",
+				"          INSPECTION_TYPE as string,",
+				"          INSPECTION_RESULT as string,",
+				"          INSPECTION_DATE as date,",
+				"          VIOLATION_CATEGORY_ID as decimal(38,0),",
+				"          VIOLATION_CATEGORY as string,",
+				"          VIOLATION_DESCRIPTION as string,",
+				"          RISK_LEVEL as string,",
+				"          LATITUDE as double,",
+				"          LONGITUDE as double,",
+				"          ZIP_CODE as string,",
+				"          CITY as string,",
+				"          STATE as string,",
+				"          ADDRESS as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceStaggingTable",
+				"source(output(",
+				"          MAX_RISK as decimal(10,0)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     query: 'SELECT NVL(MAX(RISK_SK),0) AS MAX_RISK FROM FOOD_DIM_SCHEMA.DIM_RISK',",
+				"     format: 'query') ~> sourceRisk"
+			]
+		}
+	}
+}
