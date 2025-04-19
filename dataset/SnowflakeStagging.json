@@ -90,8 +90,8 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "FOOD_DIM_SCHEMA",
-			"table": "DIM_RISK"
+			"schema": "FOOD_SCHEMA",
+			"table": "STG_FOOD_INSPECTION"
 		}
 	}
 }
