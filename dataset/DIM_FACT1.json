@@ -1,0 +1,12 @@
+{
+	"name": "DIM_FACT1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DIN_FACT1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": []
+	}
+}
