@@ -87,6 +87,12 @@
 			{
 				"name": "ADDRESS",
 				"type": "VARCHAR"
+			},
+			{
+				"name": "VIOLATION_COUNT",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
 			}
 		],
 		"typeProperties": {
