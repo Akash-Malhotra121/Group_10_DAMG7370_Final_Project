@@ -62,9 +62,6 @@
 			],
 			"transformations": [
 				{
-					"name": "select1"
-				},
-				{
 					"name": "derivedColumn1"
 				},
 				{
@@ -83,22 +80,13 @@
 					"name": "select6"
 				},
 				{
-					"name": "join1"
-				},
-				{
-					"name": "join2"
-				},
-				{
-					"name": "join3"
-				},
-				{
-					"name": "join4"
-				},
-				{
-					"name": "join5"
-				},
-				{
 					"name": "aggregate1"
+				},
+				{
+					"name": "select7"
+				},
+				{
+					"name": "join1"
 				}
 			],
 			"scriptLines": [
@@ -192,15 +180,6 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'table') ~> LOACTIONSK",
-				"source1 select(mapColumn(",
-				"          INSPECTION_ID,",
-				"          INSPECTION_SK,",
-				"          INSPECTION_TYPE,",
-				"          INSPECTION_RESULT,",
-				"          VIOLATION_COUNT",
-				"     ),",
-				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> select1",
 				"aggregate1 derive(DI_LOAD_DT = currentDate(),",
 				"          DI_JOB_ID = $JOB_ID) ~> derivedColumn1",
 				"DIMSK select(mapColumn(",
@@ -228,42 +207,32 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> select6",
-				"select1, select2 join(1==1,",
-				"     joinType:'cross',",
-				"     matchType:'exact',",
-				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join1",
-				"join1, select3 join(1==1,",
-				"     joinType:'cross',",
-				"     matchType:'exact',",
-				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join2",
-				"join2, select4 join(1==1,",
-				"     joinType:'cross',",
-				"     matchType:'exact',",
-				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join3",
-				"join3, select5 join(1==1,",
-				"     joinType:'cross',",
-				"     matchType:'exact',",
-				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join4",
-				"join4, select6 join(1==1,",
-				"     joinType:'cross',",
-				"     matchType:'exact',",
-				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join5",
-				"join5 aggregate(groupBy(INSPECTION_ID,",
+				"join1 aggregate(groupBy(INSPECTION_ID,",
 				"          INSPECTION_SK,",
 				"          INSPECTION_TYPE,",
 				"          INSPECTION_RESULT,",
 				"          VIOLATION_COUNT,",
-				"          VIOLATION_SK,",
+				"          VIOLATION_SK = select2@VIOLATION_SK,",
 				"          RISK_SK,",
 				"          FACILITY_SK,",
 				"          LOCATION_SK,",
 				"          DATE_SK),",
 				"     AGG = count(INSPECTION_ID)) ~> aggregate1",
+				"source1 select(mapColumn(",
+				"          INSPECTION_ID,",
+				"          INSPECTION_SK,",
+				"          INSPECTION_TYPE,",
+				"          INSPECTION_RESULT,",
+				"          VIOLATION_COUNT",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select7",
+				"select7, select2 join(INSPECTION_SK == INSPECTION_SK && VIOLATION_SK == VIOLATION_SK\r",
+				",",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
