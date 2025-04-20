@@ -535,13 +535,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataflow": {
-						"referenceName": "DIM_VIOLATION",
-						"type": "DataFlowReference",
-						"parameters": {
-							"JOB_ID": "\"78\""
-						}
-					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
