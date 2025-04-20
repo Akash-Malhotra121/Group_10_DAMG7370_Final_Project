@@ -1,6 +1,10 @@
 {
 	"name": "SnowflakeCHICAGO",
 	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SnowflakeFood",
+			"type": "LinkedServiceReference"
+		},
 		"annotations": [],
 		"type": "SnowflakeV2Table",
 		"schema": [
