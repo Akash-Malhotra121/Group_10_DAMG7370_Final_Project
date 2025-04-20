@@ -47,7 +47,15 @@
 					"name": "LOCATIONSK"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "factinspection",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "select1"
@@ -99,6 +107,27 @@
 				},
 				{
 					"name": "join5"
+				},
+				{
+					"name": "select7"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "filter2"
+				},
+				{
+					"name": "filter3"
+				},
+				{
+					"name": "filter4"
+				},
+				{
+					"name": "filter5"
+				},
+				{
+					"name": "filter6"
 				}
 			],
 			"scriptLines": [
@@ -228,32 +257,76 @@
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
-				"select1 derive(dummy = 1) ~> derivedColumn1",
-				"select2 derive(dummy = 1) ~> derivedColumn2",
+				"filter1 derive(dummy = 1) ~> derivedColumn1",
+				"filter2 derive(dummy = 1) ~> derivedColumn2",
 				"join1, derivedColumn3 join(derivedColumn2@dummy == derivedColumn3@dummy,",
 				"     joinType:'cross',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join2",
-				"select3 derive(dummy = 1) ~> derivedColumn3",
-				"select4 derive(dummy = 1) ~> derivedColumn4",
+				"filter3 derive(dummy = 1) ~> derivedColumn3",
+				"filter4 derive(dummy = 1) ~> derivedColumn4",
 				"join2, derivedColumn4 join(derivedColumn3@dummy == derivedColumn4@dummy,",
 				"     joinType:'cross',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join3",
-				"select5 derive(dummy = 1) ~> derivedColumn5",
+				"filter5 derive(dummy = 1) ~> derivedColumn5",
 				"join3, derivedColumn5 join(derivedColumn4@dummy == derivedColumn5@dummy,",
 				"     joinType:'cross',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join4",
-				"select6 derive(dummy = 1) ~> derivedColumn6",
+				"filter6 derive(dummy = 1) ~> derivedColumn6",
 				"join4, derivedColumn6 join(derivedColumn5@dummy == derivedColumn6@dummy,",
 				"     joinType:'cross',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join5"
+				"     broadcast: 'auto')~> join5",
+				"join5 select(mapColumn(",
+				"          INSPECTION_ID,",
+				"          INSPECTION_SK,",
+				"          INSPECTION_TYPE,",
+				"          INSPECTION_RESULT,",
+				"          VIOLATION_COUNT,",
+				"          VIOLATION_SK,",
+				"          RISK_SK,",
+				"          DATE_SK,",
+				"          FACILITY_SK,",
+				"          LOCATION_SK",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select7",
+				"select1 filter(random(123) < 0.05) ~> filter1",
+				"select2 filter(random(123) < 0.05) ~> filter2",
+				"select3 filter(random(123) < 0.05) ~> filter3",
+				"select4 filter(random(123) < 0.05) ~> filter4",
+				"select5 filter(random(123) < 0.01) ~> filter5",
+				"select6 filter(random(123) < 0.05) ~> filter6",
+				"select7 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          INSPECTION_SK as decimal(10,0),",
+				"          INSPECTION_ID as string,",
+				"          INSPECTION_TYPE as string,",
+				"          INSPECTION_RESULT as string,",
+				"          VIOLATION_COUNTS as decimal(38,0),",
+				"          DI_JOB_ID as string,",
+				"          DI_LOAD_DT as date,",
+				"          DATE_SK as decimal(10,0),",
+				"          LOCATION_SK as decimal(10,0),",
+				"          VIOLATION_SK as decimal(10,0),",
+				"          FACILITY_SK as decimal(10,0),",
+				"          RISK_SK as decimal(10,0)",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true) ~> sink1"
 			]
 		}
 	}
