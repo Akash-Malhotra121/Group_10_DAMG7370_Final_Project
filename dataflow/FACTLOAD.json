@@ -86,7 +86,46 @@
 					"name": "select7"
 				},
 				{
-					"name": "join1"
+					"name": "join2"
+				},
+				{
+					"name": "join3"
+				},
+				{
+					"name": "join4"
+				},
+				{
+					"name": "join5"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "derivedColumn3"
+				},
+				{
+					"name": "derivedColumn4"
+				},
+				{
+					"name": "derivedColumn5"
+				},
+				{
+					"name": "derivedColumn6"
+				},
+				{
+					"name": "derivedColumn7"
+				},
+				{
+					"name": "join6"
+				},
+				{
+					"name": "select8"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "filter2"
 				}
 			],
 			"scriptLines": [
@@ -207,17 +246,17 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> select6",
-				"join1 aggregate(groupBy(INSPECTION_ID,",
+				"select8 aggregate(groupBy(INSPECTION_ID,",
 				"          INSPECTION_SK,",
 				"          INSPECTION_TYPE,",
 				"          INSPECTION_RESULT,",
 				"          VIOLATION_COUNT,",
-				"          VIOLATION_SK = select2@VIOLATION_SK,",
+				"          VIOLATION_SK,",
 				"          RISK_SK,",
+				"          DATE_SK,",
 				"          FACILITY_SK,",
-				"          LOCATION_SK,",
-				"          DATE_SK),",
-				"     AGG = count(INSPECTION_ID)) ~> aggregate1",
+				"          LOCATION_SK),",
+				"     AGG = count(INSPECTION_SK)) ~> aggregate1",
 				"source1 select(mapColumn(",
 				"          INSPECTION_ID,",
 				"          INSPECTION_SK,",
@@ -227,12 +266,53 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> select7",
-				"select7, select2 join(INSPECTION_SK == INSPECTION_SK && VIOLATION_SK == VIOLATION_SK\r",
-				",",
+				"join6, derivedColumn4 join(derivedColumn3@DUMMY == DUMMY3,",
 				"     joinType:'cross',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join1",
+				"     broadcast: 'auto')~> join2",
+				"join2, derivedColumn5 join(DUMMY3 == DUMMY4,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join3",
+				"join3, derivedColumn6 join(DUMMY4 == DUMMY5,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join4",
+				"join4, derivedColumn7 join(DUMMY5==DUMMY6,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join5",
+				"filter1 derive(DUMMY = 1) ~> derivedColumn2",
+				"filter2 derive(DUMMY = 1) ~> derivedColumn3",
+				"select3 derive(DUMMY3 = 1) ~> derivedColumn4",
+				"select4 derive(DUMMY4 = 1) ~> derivedColumn5",
+				"select5 derive(DUMMY5 = 1) ~> derivedColumn6",
+				"select6 derive(DUMMY6 = 1) ~> derivedColumn7",
+				"derivedColumn2, derivedColumn3 join(derivedColumn2@DUMMY == derivedColumn3@DUMMY,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join6",
+				"join5 select(mapColumn(",
+				"          INSPECTION_ID,",
+				"          INSPECTION_SK,",
+				"          INSPECTION_TYPE,",
+				"          INSPECTION_RESULT,",
+				"          VIOLATION_COUNT,",
+				"          VIOLATION_SK,",
+				"          RISK_SK,",
+				"          DATE_SK,",
+				"          FACILITY_SK,",
+				"          LOCATION_SK",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select8",
+				"select7 filter(random(123) < 0.02) ~> filter1",
+				"select2 filter(random(123) < 0.02) ~> filter2",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
