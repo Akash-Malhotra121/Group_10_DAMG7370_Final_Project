@@ -302,7 +302,7 @@
 				"select3 filter(random(123) < 0.05) ~> filter3",
 				"select4 filter(random(123) < 0.05) ~> filter4",
 				"select5 filter(random(123) < 0.01) ~> filter5",
-				"select6 filter(random(123) < 0.05) ~> filter6",
+				"select6 filter(random(123) < 0.01) ~> filter6",
 				"select7 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
