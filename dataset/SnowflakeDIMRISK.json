@@ -1,0 +1,35 @@
+{
+	"name": "SnowflakeDIMRISK",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SnowflakeFood",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "RISK_SK",
+				"type": "NUMBER",
+				"precision": 10,
+				"scale": 0
+			},
+			{
+				"name": "RISK_LEVEL",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DI_LOAD_DT",
+				"type": "DATE"
+			},
+			{
+				"name": "DI_JOB_ID",
+				"type": "VARCHAR"
+			}
+		],
+		"typeProperties": {
+			"schema": "FOOD_DIM_SCHEMA",
+			"table": "DIM_RISK"
+		}
+	}
+}
