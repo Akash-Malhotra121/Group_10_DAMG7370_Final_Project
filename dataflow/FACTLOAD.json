@@ -80,9 +80,6 @@
 					"name": "select6"
 				},
 				{
-					"name": "aggregate1"
-				},
-				{
 					"name": "select7"
 				},
 				{
@@ -122,10 +119,7 @@
 					"name": "select8"
 				},
 				{
-					"name": "filter1"
-				},
-				{
-					"name": "filter2"
+					"name": "aggregate1"
 				}
 			],
 			"scriptLines": [
@@ -219,7 +213,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'table') ~> LOACTIONSK",
-				"aggregate1 derive(DI_LOAD_DT = currentDate(),",
+				"select8 derive(DI_LOAD_DT = currentDate(),",
 				"          DI_JOB_ID = $JOB_ID) ~> derivedColumn1",
 				"DIMSK select(mapColumn(",
 				"          VIOLATION_SK",
@@ -246,17 +240,6 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> select6",
-				"select8 aggregate(groupBy(INSPECTION_ID,",
-				"          INSPECTION_SK,",
-				"          INSPECTION_TYPE,",
-				"          INSPECTION_RESULT,",
-				"          VIOLATION_COUNT,",
-				"          VIOLATION_SK,",
-				"          RISK_SK,",
-				"          DATE_SK,",
-				"          FACILITY_SK,",
-				"          LOCATION_SK),",
-				"     AGG = count(INSPECTION_SK)) ~> aggregate1",
 				"source1 select(mapColumn(",
 				"          INSPECTION_ID,",
 				"          INSPECTION_SK,",
@@ -286,8 +269,8 @@
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join5",
-				"filter1 derive(DUMMY = 1) ~> derivedColumn2",
-				"filter2 derive(DUMMY = 1) ~> derivedColumn3",
+				"select7 derive(DUMMY = 1) ~> derivedColumn2",
+				"select2 derive(DUMMY = 1) ~> derivedColumn3",
 				"select3 derive(DUMMY3 = 1) ~> derivedColumn4",
 				"select4 derive(DUMMY4 = 1) ~> derivedColumn5",
 				"select5 derive(DUMMY5 = 1) ~> derivedColumn6",
@@ -311,9 +294,20 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> select8",
-				"select7 filter(random(123) < 0.02) ~> filter1",
-				"select2 filter(random(123) < 0.02) ~> filter2",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"derivedColumn1 aggregate(groupBy(INSPECTION_ID,",
+				"          VIOLATION_COUNT,",
+				"          INSPECTION_TYPE,",
+				"          INSPECTION_RESULT,",
+				"          INSPECTION_SK,",
+				"          VIOLATION_SK,",
+				"          RISK_SK,",
+				"          DATE_SK,",
+				"          FACILITY_SK,",
+				"          LOCATION_SK,",
+				"          DI_LOAD_DT,",
+				"          DI_JOB_ID),",
+				"     EGGID = first(LOCATION_SK)) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          INSPECTION_SK as decimal(10,0),",
