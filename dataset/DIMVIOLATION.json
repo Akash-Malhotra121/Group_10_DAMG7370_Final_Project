@@ -1,0 +1,45 @@
+{
+	"name": "DIMVIOLATION",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Snowflake_Chicago_Dallas",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "VIOLATION_SK",
+				"type": "NUMBER",
+				"precision": 10,
+				"scale": 0
+			},
+			{
+				"name": "VIOLATION_CAT_ID",
+				"type": "NUMBER",
+				"precision": 10,
+				"scale": 0
+			},
+			{
+				"name": "VIOALTION_CAT",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "VIOLATION_DESCRIPTION",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DI_LOAD_DT",
+				"type": "DATE"
+			},
+			{
+				"name": "DI_JOB_ID",
+				"type": "VARCHAR"
+			}
+		],
+		"typeProperties": {
+			"schema": "FOOD_DIM_SCHEMA",
+			"table": "DIM_VIOLATION"
+		}
+	}
+}
