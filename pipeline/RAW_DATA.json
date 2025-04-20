@@ -554,7 +554,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
-					"timeout": "0.02:50:00",
+					"timeout": "0.04:50:00",
 					"retry": 0,
 					"retryIntervalInSeconds": 7200,
 					"secureOutput": false,
@@ -570,8 +570,8 @@
 						}
 					},
 					"compute": {
-						"coreCount": 32,
-						"computeType": "MemoryOptimized"
+						"coreCount": 16,
+						"computeType": "General"
 					},
 					"traceLevel": "Fine"
 				}
