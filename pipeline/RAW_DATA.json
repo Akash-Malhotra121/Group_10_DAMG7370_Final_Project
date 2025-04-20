@@ -562,13 +562,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataflow": {
-						"referenceName": "FACTLOAD",
-						"type": "DataFlowReference",
-						"parameters": {
-							"JOB_ID": "\"79\""
-						}
-					},
 					"compute": {
 						"coreCount": 16,
 						"computeType": "General"
