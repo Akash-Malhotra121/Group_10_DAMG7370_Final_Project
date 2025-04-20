@@ -14,6 +14,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "SnowflakeDIMVIOLATION",
+						"type": "DatasetReference"
+					},
 					"name": "sink1"
 				}
 			],
@@ -70,6 +74,19 @@
 				"     stepValue: 1L) ~> surrogateKey1",
 				"surrogateKey1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          VIOLATION_SK as decimal(10,0),",
+				"          VIOLATION_CAT_ID as decimal(10,0),",
+				"          VIOALTION_CAT as string,",
+				"          VIOLATION_DESCRIPTION as string,",
+				"          DI_LOAD_DT as date,",
+				"          DI_JOB_ID as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
 				"     mapColumn(",
 				"          VIOLATION_SK = VIOLATIONS_SK,",
 				"          VIOLATION_CAT_ID = VIOLATION_CATEGORY_ID,",
@@ -77,8 +94,7 @@
 				"          VIOLATION_DESCRIPTION,",
 				"          DI_LOAD_DT,",
 				"          DI_JOB_ID",
-				"     ),",
-				"     format: 'table') ~> sink1"
+				"     )) ~> sink1"
 			]
 		}
 	}
