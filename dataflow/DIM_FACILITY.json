@@ -161,12 +161,12 @@
 				"     format: 'table',",
 				"     stageInsert: true,",
 				"     mapColumn(",
+				"          FACILITY_SK,",
+				"          FACILITY_TYPE,",
 				"          DBA_NAME,",
 				"          AKA_NAME,",
-				"          FACILITY_TYPE,",
-				"          FACILITY_SK,",
-				"          DI_JOB_ID,",
-				"          DI_LOAD_DT",
+				"          DI_LOAD_DT,",
+				"          DI_JOB_ID",
 				"     )) ~> sink1"
 			]
 		}
