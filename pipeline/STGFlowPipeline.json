@@ -29,7 +29,7 @@
 				}
 			},
 			{
-				"name": "DIMFACT",
+				"name": "DimLocation",
 				"type": "ExecuteDataFlow",
 				"state": "Inactive",
 				"onInactiveMarkAs": "Succeeded",
