@@ -109,7 +109,7 @@
 				"          VIOLATION_CATEGORY_ID,",
 				"          VIOLATION_DESCRIPTION,",
 				"          MAX_VIOLATION),",
-				"     COUNTROW = count(INSPECTION_ID)) ~> aggregate1",
+				"     MAXDESC = max(VIOLATION_DESCRIPTION)) ~> aggregate1",
 				"aggregate1, source3 join(VIOLATION_CATEGORY == VIOALTION_CAT",
 				"     && VIOLATION_CATEGORY_ID == VIOLATION_CAT_ID",
 				"     && aggregate1@VIOLATION_DESCRIPTION == source3@VIOLATION_DESCRIPTION,",
