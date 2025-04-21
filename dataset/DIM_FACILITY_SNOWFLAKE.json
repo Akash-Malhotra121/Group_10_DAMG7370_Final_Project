@@ -36,8 +36,8 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "FOOD_DIM_SCHEMA",
-			"table": "DIM_FACILITY"
+			"schema": "FOOD_SCHEMA",
+			"table": "DATE_DIM"
 		}
 	}
 }
