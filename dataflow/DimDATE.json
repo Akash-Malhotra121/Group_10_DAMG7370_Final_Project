@@ -75,7 +75,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     query: 'SELECT NVL(MAX(DATE_SK),0) AS MAX_DATE FROM FOOD_DIM_SCHEMA.DATE_DIM',",
+				"     query: 'SELECT NVL(MAX(DATE_SK),0) AS MAX_DATE FROM FOOD_SCHEMA.DATE_DIM',",
 				"     format: 'query') ~> sourceDIM",
 				"join1 select(mapColumn(",
 				"          INSPECTION_DATE,",

@@ -88,7 +88,7 @@
 				"     ),",
 				"     allowSchemaDrift: false,",
 				"     validateSchema: false,",
-				"     query: 'SELECT NVL(MAX(LOCATION_SK),0) AS MAX_LOCATION FROM FOOD_DIM_SCHEMA.DIM_LOCATION',",
+				"     query: 'SELECT NVL(MAX(LOCATION_SK),0) AS MAX_LOCATION FROM FOOD_SCHEMA.DIM_LOCATION',",
 				"     format: 'query') ~> sourceloc",
 				"source(output(",
 				"          LOCATION_SK as decimal(10,0),",
