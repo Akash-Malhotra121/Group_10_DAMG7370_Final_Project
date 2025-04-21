@@ -541,33 +541,6 @@
 					},
 					"traceLevel": "Fine"
 				}
-			},
-			{
-				"name": "Data flow1",
-				"type": "ExecuteDataFlow",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.04:50:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 7200,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"dataflow": {
-						"referenceName": "fact",
-						"type": "DataFlowReference",
-						"parameters": {
-							"JOB_ID": "\"7\""
-						}
-					},
-					"compute": {
-						"coreCount": 16,
-						"computeType": "General"
-					},
-					"traceLevel": "Fine"
-				}
 			}
 		],
 		"parameters": {

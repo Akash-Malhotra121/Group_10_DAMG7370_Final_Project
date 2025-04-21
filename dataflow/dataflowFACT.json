@@ -1,0 +1,84 @@
+{
+	"name": "dataflowFACT",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SNOWSTGTABLE",
+						"type": "DatasetReference"
+					},
+					"name": "sourceSTG"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeDIMVIO",
+						"type": "DatasetReference"
+					},
+					"name": "sourceVIO"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeDIMRISK",
+						"type": "DatasetReference"
+					},
+					"name": "sourceRISK"
+				},
+				{
+					"name": "sourceFAC"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          DBA_NAME as string,",
+				"          AKA_NAME as string,",
+				"          FACILITY_TYPE as string,",
+				"          INSPECTION_ID as string,",
+				"          INSPECTION_SK as decimal(38,0),",
+				"          INSPECTION_TYPE as string,",
+				"          INSPECTION_RESULT as string,",
+				"          INSPECTION_DATE as date,",
+				"          VIOLATION_CATEGORY_ID as decimal(38,0),",
+				"          VIOLATION_CATEGORY as string,",
+				"          VIOLATION_DESCRIPTION as string,",
+				"          RISK_LEVEL as string,",
+				"          LATITUDE as double,",
+				"          LONGITUDE as double,",
+				"          ZIP_CODE as string,",
+				"          CITY as string,",
+				"          STATE as string,",
+				"          ADDRESS as string,",
+				"          VIOLATION_COUNT as decimal(38,0)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceSTG",
+				"source(output(",
+				"          VIOLATION_SK as decimal(10,0),",
+				"          VIOLATION_CAT_ID as decimal(10,0),",
+				"          VIOALTION_CAT as string,",
+				"          VIOLATION_DESCRIPTION as string,",
+				"          DI_LOAD_DT as date,",
+				"          DI_JOB_ID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceVIO",
+				"source(output(",
+				"          RISK_SK as decimal(10,0),",
+				"          RISK_LEVEL as string,",
+				"          DI_LOAD_DT as date,",
+				"          DI_JOB_ID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceRISK",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> sourceFAC"
+			]
+		}
+	}
+}
