@@ -10,6 +10,20 @@
 						"type": "DatasetReference"
 					},
 					"name": "SourceSTG"
+				},
+				{
+					"dataset": {
+						"referenceName": "DIM_LOCATION",
+						"type": "DatasetReference"
+					},
+					"name": "sourceloc"
+				},
+				{
+					"dataset": {
+						"referenceName": "DIM_LOCATION",
+						"type": "DatasetReference"
+					},
+					"name": "sourceLOC1"
 				}
 			],
 			"sinks": [
@@ -23,13 +37,22 @@
 			],
 			"transformations": [
 				{
-					"name": "select1"
-				},
-				{
 					"name": "surrogateKey1"
 				},
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -60,21 +83,69 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'table') ~> SourceSTG",
-				"SourceSTG select(mapColumn(",
-				"          LATITUDE,",
-				"          LONGITUDE,",
-				"          ZIP_CODE,",
-				"          CITY,",
-				"          STATE,",
-				"          ADDRESS",
+				"source(output(",
+				"          MAX_LOCATION as decimal(10,0)",
 				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 keyGenerate(output(LOCATION_SK as long),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     query: 'SELECT NVL(MAX(LOCATION_SK),0) AS MAX_LOCATION FROM FOOD_DIM_SCHEMA.DIM_LOCATION',",
+				"     format: 'query') ~> sourceloc",
+				"source(output(",
+				"          LOCATION_SK as decimal(10,0),",
+				"          LATITUDE as double,",
+				"          LONGITUDE as double,",
+				"          CITY as string,",
+				"          STATE as string,",
+				"          ADDRESS as string,",
+				"          ZIP_CODE as decimal(20,0),",
+				"          DI_LOAD_DT as date,",
+				"          DI_JOB_ID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceLOC1",
+				"select1 keyGenerate(output(ROWNUM as long),",
 				"     startAt: 1L,",
 				"     stepValue: 1L) ~> surrogateKey1",
 				"surrogateKey1 derive(DI_JOB_ID = $JOB_PARAM,",
-				"          DI_LOAD_DT = currentDate()) ~> derivedColumn1",
+				"          DI_LOAD_DT = currentDate(),",
+				"          LOCATION_SK = ROWNUM+MAX_LOCATION) ~> derivedColumn1",
+				"join1 aggregate(groupBy(ZIP_CODE,",
+				"          LATITUDE,",
+				"          LONGITUDE,",
+				"          CITY,",
+				"          STATE,",
+				"          ADDRESS,",
+				"          MAX_LOCATION),",
+				"     COUNTROW = count(INSPECTION_ID)) ~> aggregate1",
+				"SourceSTG, sourceloc join(1==1,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"aggregate1, sourceLOC1 join(aggregate1@ZIP_CODE == toString(sourceLOC1@ZIP_CODE)",
+				"     && aggregate1@LATITUDE == sourceLOC1@LATITUDE",
+				"     && aggregate1@LONGITUDE == sourceLOC1@LONGITUDE",
+				"     && aggregate1@ADDRESS == sourceLOC1@ADDRESS",
+				"     && aggregate1@CITY == sourceLOC1@CITY",
+				"     && aggregate1@STATE == sourceLOC1@STATE,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"join2 select(mapColumn(",
+				"          ZIP_CODE = aggregate1@ZIP_CODE,",
+				"          LATITUDE = aggregate1@LATITUDE,",
+				"          LONGITUDE = aggregate1@LONGITUDE,",
+				"          CITY = aggregate1@CITY,",
+				"          STATE = aggregate1@STATE,",
+				"          ADDRESS = aggregate1@ADDRESS,",
+				"          COUNTROW,",
+				"          LOCATION_SK,",
+				"          MAX_LOCATION",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
