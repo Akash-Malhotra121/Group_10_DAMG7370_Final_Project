@@ -46,6 +46,9 @@
 				},
 				{
 					"name": "aggregate1"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -111,7 +114,7 @@
 				"aggregate1 keyGenerate(output(INSPECTION_SK as long),",
 				"     startAt: 1L,",
 				"     stepValue: 1L) ~> surrogateKey1",
-				"STGDFChicago, convertViolationCategoryId union(byName: true)~> unionCD",
+				"select1, convertViolationCategoryId union(byName: true)~> unionCD",
 				"STGDFDallas select(mapColumn(",
 				"          INSPECTION_ID,",
 				"          DBA_NAME = RESTAURANT_NAME,",
@@ -154,6 +157,28 @@
 				"          RISK_LEVEL,",
 				"          VIOLATION_COUNT),",
 				"     INSPECTION_ID_2 = count(INSPECTION_ID)) ~> aggregate1",
+				"STGDFChicago select(mapColumn(",
+				"          INSPECTION_ID,",
+				"          DBA_NAME,",
+				"          AKA_NAME,",
+				"          FACILITY_TYPE,",
+				"          ADDRESS,",
+				"          CITY,",
+				"          STATE,",
+				"          ZIP,",
+				"          INSPECTION_DATE,",
+				"          INSPECTION_TYPE,",
+				"          LATITUDE,",
+				"          LONGITUDE,",
+				"          LOCATION,",
+				"          VIOLATION_CATEGORY_ID,",
+				"          VIOLATION_CATEGORY,",
+				"          VIOLATION_COMMENT,",
+				"          RISK_LEVEL,",
+				"          VIOLATION_COUNT",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
 				"surrogateKey1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
