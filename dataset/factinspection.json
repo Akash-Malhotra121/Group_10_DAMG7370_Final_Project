@@ -27,12 +27,6 @@
 				"type": "VARCHAR"
 			},
 			{
-				"name": "VIOLATION_COUNTS",
-				"type": "NUMBER",
-				"precision": 38,
-				"scale": 0
-			},
-			{
 				"name": "DI_JOB_ID",
 				"type": "VARCHAR"
 			},
