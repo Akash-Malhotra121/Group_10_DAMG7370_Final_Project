@@ -132,7 +132,7 @@
 				"          VIOLATION_CATEGORY,",
 				"          VIOLATION_DESCRIPTION = VIOLATION_COMMENT,",
 				"          RISK_LEVEL,",
-				"          VIOLATION_COUNT",
+				"          VIOLATION_COUNT = aggregate2@VIOLATION_COUNT",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> selectChicago",
