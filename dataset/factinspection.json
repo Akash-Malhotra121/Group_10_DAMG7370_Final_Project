@@ -31,6 +31,12 @@
 				"type": "VARCHAR"
 			},
 			{
+				"name": "VIOLATION_COUNTS",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
 				"name": "DI_LOAD_DT",
 				"type": "DATE"
 			},
