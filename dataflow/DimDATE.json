@@ -22,7 +22,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "SnowflakeDATEdIM",
+						"referenceName": "foodschema_DIMLOCATION",
 						"type": "DatasetReference"
 					},
 					"name": "DATEDIM"
