@@ -6,10 +6,10 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "SnowflakeStagging",
+						"referenceName": "SnowflakeDallas",
 						"type": "DatasetReference"
 					},
-					"name": "sourceTable"
+					"name": "sourceDallas"
 				},
 				{
 					"dataset": {
@@ -47,76 +47,41 @@
 					"name": "sourceVoilation"
 				}
 			],
-			"sinks": [
-				{
-					"name": "sinkFACT"
-				}
-			],
-			"transformations": [
-				{
-					"name": "selectFacility"
-				},
-				{
-					"name": "selectDate"
-				},
-				{
-					"name": "selectLocation"
-				},
-				{
-					"name": "selectRisk"
-				},
-				{
-					"name": "selectVoilation"
-				},
-				{
-					"name": "selectSource"
-				},
-				{
-					"name": "joinFacility"
-				},
-				{
-					"name": "joinDate"
-				},
-				{
-					"name": "joinLocation"
-				},
-				{
-					"name": "joinRisk"
-				},
-				{
-					"name": "joinVoilation"
-				},
-				{
-					"name": "derivedColumn1"
-				},
-				{
-					"name": "derivedZIPCode"
-				}
-			],
+			"sinks": [],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
-				"          DBA_NAME as string,",
-				"          AKA_NAME as string,",
-				"          FACILITY_TYPE as string,",
 				"          INSPECTION_ID as string,",
-				"          INSPECTION_SK as decimal(38,0),",
+				"          RESTAURANT_NAME as string,",
 				"          INSPECTION_TYPE as string,",
-				"          INSPECTION_RESULT as string,",
 				"          INSPECTION_DATE as date,",
-				"          VIOLATION_CATEGORY_ID as decimal(38,0),",
+				"          INSPECTION_SCORE as decimal(38,0),",
+				"          STREET_NAME as string,",
+				"          STREET_TYPE as string,",
+				"          ZIP_CODE as string,",
+				"          INSPECTION_MONTH as string,",
+				"          INSPECTION_YEAR as string,",
+				"          LAT_LONG_LOC as string,",
+				"          NAME as string,",
+				"          VALUE as string,",
+				"          VIOLATIONS_1 as string,",
+				"          VIOLATION_POINT as decimal(38,0),",
+				"          VIOLATION_OTHER as string,",
+				"          STATE as string,",
+				"          FACILITY_TYPE as string,",
+				"          CITY as string,",
+				"          RIGHT_INSPECTION_ID as string,",
+				"          VIOLATION_CATEGORY_ID as string,",
 				"          VIOLATION_CATEGORY as string,",
-				"          VIOLATION_DESCRIPTION as string,",
-				"          RISK_LEVEL as string,",
 				"          LATITUDE as double,",
 				"          LONGITUDE as double,",
-				"          ZIP_CODE as string,",
-				"          CITY as string,",
-				"          STATE as string,",
-				"          ADDRESS as string",
+				"          RISK_LEVEL as string,",
+				"          INSPECTION_RESULT as string,",
+				"          AKA_NAME as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     format: 'table') ~> sourceTable",
+				"     format: 'table') ~> sourceDallas",
 				"source(output(",
 				"          FACILITY_SK as decimal(10,0),",
 				"          FACILITY_TYPE as string,",
@@ -179,102 +144,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     format: 'table') ~> sourceVoilation",
-				"sourceFacility select(mapColumn(",
-				"          FACILITY_SK,",
-				"          FACILITY_TYPE",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> selectFacility",
-				"sourceDate select(mapColumn(",
-				"          DATE_SK,",
-				"          DT",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> selectDate",
-				"sourceLocation select(mapColumn(",
-				"          LOCATION_SK,",
-				"          ZIP_CODE",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> selectLocation",
-				"sourceRisk select(mapColumn(",
-				"          RISK_SK,",
-				"          RISK_LEVEL",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> selectRisk",
-				"sourceVoilation select(mapColumn(",
-				"          VIOLATION_SK,",
-				"          VIOLATION_CAT_ID,",
-				"          VIOALTION_CAT,",
-				"          VIOLATION_DESCRIPTION",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> selectVoilation",
-				"sourceTable select(mapColumn(",
-				"          FACILITY_TYPE,",
-				"          INSPECTION_ID,",
-				"          INSPECTION_SK,",
-				"          INSPECTION_TYPE,",
-				"          INSPECTION_RESULT,",
-				"          INSPECTION_DATE,",
-				"          VIOLATION_CATEGORY_ID,",
-				"          VIOLATION_CATEGORY,",
-				"          VIOLATION_DESCRIPTION,",
-				"          RISK_LEVEL,",
-				"          ZIP_CODE,",
-				"          ADDRESS",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> selectSource",
-				"selectSource, selectFacility join(selectSource@FACILITY_TYPE == selectFacility@FACILITY_TYPE,",
-				"     joinType:'left',",
-				"     matchType:'exact',",
-				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> joinFacility",
-				"joinFacility, selectDate join(INSPECTION_DATE == DT,",
-				"     joinType:'inner',",
-				"     matchType:'exact',",
-				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> joinDate",
-				"joinDate, derivedZIPCode join(selectSource@ZIP_CODE == derivedZIPCode@ZIP_CODE,",
-				"     joinType:'left',",
-				"     matchType:'exact',",
-				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> joinLocation",
-				"joinLocation, selectRisk join(selectSource@RISK_LEVEL == selectRisk@RISK_LEVEL,",
-				"     joinType:'left',",
-				"     matchType:'exact',",
-				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> joinRisk",
-				"joinRisk, selectVoilation join(VIOLATION_CATEGORY_ID == VIOLATION_CAT_ID",
-				"     && VIOLATION_CATEGORY == VIOALTION_CAT",
-				"     && selectSource@VIOLATION_DESCRIPTION == selectVoilation@VIOLATION_DESCRIPTION,",
-				"     joinType:'left',",
-				"     matchType:'exact',",
-				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> joinVoilation",
-				"joinVoilation derive(DI_JOB_ID = \"aka\",",
-				"          DI_LOAD_DT = currentTimestamp()) ~> derivedColumn1",
-				"selectLocation derive(ZIP_CODE = toString(ZIP_CODE)) ~> derivedZIPCode",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     mapColumn(",
-				"          INSPECTION_ID,",
-				"          INSPECTION_SK,",
-				"          INSPECTION_TYPE,",
-				"          INSPECTION_RESULT,",
-				"          FACILITY_SK,",
-				"          DATE_SK,",
-				"          LOCATION_SK,",
-				"          RISK_SK,",
-				"          VIOLATION_SK,",
-				"          DI_JOB_ID,",
-				"          DI_LOAD_DT",
-				"     )) ~> sinkFACT"
+				"     format: 'table') ~> sourceVoilation"
 			]
 		}
 	}
