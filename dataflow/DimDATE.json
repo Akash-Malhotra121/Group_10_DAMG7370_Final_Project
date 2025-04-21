@@ -22,7 +22,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "foodschema_DIMLOCATION",
+						"referenceName": "foodschema_DIMDATE",
 						"type": "DatasetReference"
 					},
 					"name": "DATEDIM"
