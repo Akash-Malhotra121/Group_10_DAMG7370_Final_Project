@@ -134,7 +134,7 @@
 				"     format: 'table',",
 				"     stageInsert: true,",
 				"     mapColumn(",
-				"          DATE_SK,",
+				"          DATE_SK = ROWNUM,",
 				"          DAY_NAME,",
 				"          DAY_ABBR,",
 				"          DAY_NUM,",
