@@ -5,6 +5,8 @@
 			{
 				"name": "DIM_FACILITY",
 				"type": "ExecuteDataFlow",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.00:30:00",
@@ -29,6 +31,8 @@
 			{
 				"name": "DIM_RISK",
 				"type": "ExecuteDataFlow",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.00:30:00",
@@ -90,11 +94,8 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "DIM_VIOLATION",
-						"type": "DataFlowReference",
-						"parameters": {
-							"JOB_ID": "\"79\""
-						}
+						"referenceName": "DIM_VIOLATION2",
+						"type": "DataFlowReference"
 					},
 					"compute": {
 						"coreCount": 8,

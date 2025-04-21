@@ -39,6 +39,12 @@
 				},
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "select2"
 				}
 			],
 			"scriptLines": [
@@ -77,6 +83,7 @@
 				"          VIOLATION_CATEGORY_ID),",
 				"     desc(VIOLATION_CATEGORY_ID, true),",
 				"     desc(VIOLATION_DESCRIPTION, true),",
+				"     desc(VIOLATION_CATEGORY_ID, true),",
 				"     Record_Count = count(1),",
 				"          newest = rank()==1) ~> windowViolation",
 				"windowViolation split(Record_Count==1,",
@@ -89,6 +96,24 @@
 				"     stepValue: 1L) ~> surrogateViolation",
 				"surrogateViolation derive(DI_JOB_ID = \"aka\",",
 				"          DI_LOAD_DT = currentTimestamp()) ~> derivedColumn1",
+				"split1@OldDup select(mapColumn(",
+				"          VIOLATION_CATEGORY_ID,",
+				"          VIOLATION_CATEGORY,",
+				"          VIOLATION_DESCRIPTION,",
+				"          Record_Count,",
+				"          newest",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select1",
+				"split1@NewestDup select(mapColumn(",
+				"          VIOLATION_CATEGORY_ID,",
+				"          VIOLATION_CATEGORY,",
+				"          VIOLATION_DESCRIPTION,",
+				"          Record_Count,",
+				"          newest",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -104,9 +129,15 @@
 				"     updateable:false,",
 				"     upsertable:false,",
 				"     format: 'table',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     stageInsert: true) ~> sinkViolation"
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          VIOLATION_SK = RowNum,",
+				"          VIOLATION_CAT_ID = VIOLATION_CATEGORY_ID,",
+				"          VIOALTION_CAT = VIOLATION_CATEGORY,",
+				"          VIOLATION_DESCRIPTION,",
+				"          DI_LOAD_DT,",
+				"          DI_JOB_ID",
+				"     )) ~> sinkViolation"
 			]
 		}
 	}
