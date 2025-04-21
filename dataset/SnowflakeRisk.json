@@ -28,7 +28,7 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "FOOD_DIM_SCHEMA",
+			"schema": "FOOD_SCHEMA",
 			"table": "DIM_RISK"
 		}
 	}
