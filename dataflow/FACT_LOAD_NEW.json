@@ -54,10 +54,39 @@
 					"name": "sourceFACTINSPECTION"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "factinspection",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "join3"
+				},
+				{
+					"name": "join4"
+				},
+				{
+					"name": "join5"
+				},
+				{
+					"name": "join6"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -149,6 +178,71 @@
 				"     validateSchema: false,",
 				"     format: 'table') ~> sourceVIOLATION",
 				"source(output(",
+				"          MAX_FACTINSPECTIONID as decimal(10,0)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     query: 'SELECT NVL(MAX(INSPECTION_SK),0) AS MAX_FACTINSPECTIONID FROM FOOD_DIM_SCHEMA.FACT_INSPECTION',",
+				"     format: 'query') ~> sourceFACTINSPECTION",
+				"sourcestg derive(INSPECTION_ID = ERROR_FUNCTION('')) ~> derivedColumn1",
+				"derivedColumn1, sourceLOC join(sourcestg@LATITUDE == sourceLOC@LATITUDE",
+				"     && sourcestg@LONGITUDE == sourceLOC@LONGITUDE",
+				"     && sourcestg@ZIP_CODE == toString(sourceLOC@ZIP_CODE)",
+				"     && sourcestg@CITY == sourceLOC@CITY",
+				"     && sourcestg@STATE == sourceLOC@STATE,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1, sourceDATE join(INSPECTION_DATE == DT,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"join2, sourceFACILITY join(sourcestg@FACILITY_TYPE == sourceFACILITY@FACILITY_TYPE",
+				"     && sourcestg@DBA_NAME == sourceFACILITY@DBA_NAME",
+				"     && sourcestg@AKA_NAME == sourceFACILITY@AKA_NAME,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join3",
+				"join3, sourceRISK join(sourcestg@RISK_LEVEL == sourceRISK@RISK_LEVEL,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join4",
+				"join4, sourceVIOLATION join(VIOLATION_CATEGORY_ID == VIOLATION_CAT_ID",
+				"     && VIOLATION_CATEGORY == VIOALTION_CAT",
+				"     && sourcestg@VIOLATION_DESCRIPTION == sourceVIOLATION@VIOLATION_DESCRIPTION,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join5",
+				"join5, sourceFACTINSPECTION join(1==1,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join6",
+				"join6 select(mapColumn(",
+				"          INSPECTION_ID,",
+				"          INSPECTION_SK,",
+				"          INSPECTION_TYPE,",
+				"          INSPECTION_RESULT,",
+				"          INSPECTION_DATE,",
+				"          VIOLATION_COUNT,",
+				"          LOCATION_SK,",
+				"          DI_JOB_ID = sourceDATE@DI_JOB_ID,",
+				"          DI_LOAD_DT = sourceDATE@DI_LOAD_DT,",
+				"          FACILITY_SK,",
+				"          RISK_SK,",
+				"          VIOLATION_SK,",
+				"          DATE_SK",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
 				"          INSPECTION_SK as decimal(10,0),",
 				"          INSPECTION_ID as string,",
 				"          INSPECTION_TYPE as string,",
@@ -162,10 +256,26 @@
 				"          FACILITY_SK as decimal(10,0),",
 				"          RISK_SK as decimal(10,0)",
 				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     format: 'table') ~> sourceFACTINSPECTION",
-				"sourcestg derive(INSPECTION_ID = ERROR_FUNCTION('')) ~> derivedColumn1"
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          INSPECTION_SK,",
+				"          INSPECTION_ID,",
+				"          INSPECTION_TYPE,",
+				"          INSPECTION_RESULT,",
+				"          VIOLATION_COUNTS = VIOLATION_COUNT,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT,",
+				"          DATE_SK,",
+				"          LOCATION_SK,",
+				"          VIOLATION_SK,",
+				"          FACILITY_SK,",
+				"          RISK_SK",
+				"     )) ~> sink1"
 			]
 		}
 	}
