@@ -29,7 +29,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "DIM_FACILITY_SNOWFLAKE",
+						"referenceName": "SnowflakeFacilityLoad",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -88,7 +88,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     query: 'SELECT NVL(MAX(FACILITY_SK),0) AS MAX_FACILITY FROM FOOD_DIM_SCHEMA.DIM_FACILITY',",
+				"     query: 'SELECT NVL(MAX(FACILITY_SK),0) AS MAX_FACILITY FROM FOOD_SCHEMA.DIM_FACILITY',",
 				"     format: 'query') ~> sourceFacility",
 				"source(output(",
 				"          FACILITY_SK as decimal(10,0),",
