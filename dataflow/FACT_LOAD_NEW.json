@@ -126,6 +126,9 @@
 				},
 				{
 					"name": "aggregate4"
+				},
+				{
+					"name": "filter1"
 				}
 			],
 			"scriptLines": [
@@ -228,7 +231,7 @@
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
-				"select4, select3 join(INSPECTION_DATE == DT,",
+				"filter1, select3 join(INSPECTION_DATE == DT,",
 				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
@@ -388,6 +391,7 @@
 				"          ADDRESS = first(ADDRESS),",
 				"          VIOLATION_DESCRIPTION = first(selectVIO@VIOLATION_DESCRIPTION),",
 				"          DBA_NAME = first(selectFAC@DBA_NAME)) ~> aggregate4",
+				"select4 filter(random(123)<0.05) ~> filter1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
