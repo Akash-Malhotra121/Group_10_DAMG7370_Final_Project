@@ -84,7 +84,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     query: 'SELECT NVL(MAX(RISK_SK),0) AS MAX_RISK FROM FOOD_DIM_SCHEMA.DIM_RISK',",
+				"     query: 'SELECT NVL(MAX(RISK_SK),0) AS MAX_RISK FROM FOOD_SCHEMA.DIM_RISK',",
 				"     format: 'query') ~> sourceRisk",
 				"source(output(",
 				"          RISK_SK as decimal(10,0),",
