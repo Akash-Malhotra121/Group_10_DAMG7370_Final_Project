@@ -310,7 +310,6 @@
 				"          INSPECTION_ID as string,",
 				"          INSPECTION_TYPE as string,",
 				"          INSPECTION_RESULT as string,",
-				"          VIOLATION_COUNTS as decimal(38,0),",
 				"          DI_JOB_ID as string,",
 				"          DI_LOAD_DT as date,",
 				"          DATE_SK as decimal(10,0),",
