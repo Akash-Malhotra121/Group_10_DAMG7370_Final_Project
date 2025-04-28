@@ -1,0 +1,17 @@
+{
+	"name": "DIN_FACT1",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SnowflakeV2",
+		"typeProperties": {
+			"authenticationType": "Basic",
+			"accountIdentifier": "nua36929.east-us-2.azure",
+			"user": "FOOD_USER",
+			"database": "FOOD_DB",
+			"warehouse": "FOOD_WH",
+			"role": "FOOD_DEV_ROLE",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDIzNTVBMDBCLTAzMDctNDdCOS04OUQ5LTcyODYzQUM4Rjg5Rl80MDBkZjlmMi1kZDE2LTQ0NTAtYjdhZS1mMTM0MmEwNDk1ZmUiDQp9"
+		}
+	}
+}

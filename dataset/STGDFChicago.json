@@ -1,0 +1,109 @@
+{
+	"name": "STGDFChicago",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Snowflake_Chicago_Dallas",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "INSPECTION_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DBA_NAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "AKA_NAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "FACILITY_TYPE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "RISK",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ADDRESS",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "CITY",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "STATE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ZIP",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "INSPECTION_DATE",
+				"type": "DATE"
+			},
+			{
+				"name": "INSPECTION_TYPE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "RESULTS",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "LATITUDE",
+				"type": "FLOAT",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "LONGITUDE",
+				"type": "FLOAT",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "LOCATION",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "VIOLATION_CATEGORY_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "VIOLATION_CATEGORY",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "VIOLATION_COMMENT",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "RISK_LEVEL_NUMBER",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "RISK_LEVEL",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "VIOLATION_COUNT",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "FOOD_SCHEMA",
+			"table": "STG_CHICAGO"
+		}
+	}
+}
