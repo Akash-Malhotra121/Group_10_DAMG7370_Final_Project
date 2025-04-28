@@ -1,0 +1,174 @@
+{
+	"name": "DIM_FACILITY",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeStagging",
+						"type": "DatasetReference"
+					},
+					"name": "sourceStage"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTableDIM",
+						"type": "DatasetReference"
+					},
+					"name": "sourceFacility"
+				},
+				{
+					"dataset": {
+						"referenceName": "SnowflakeFacility",
+						"type": "DatasetReference"
+					},
+					"name": "sourceFacility2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeFacilityLoad",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "joinFacility"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "surrogateKey1"
+				},
+				{
+					"name": "joinFacility2"
+				},
+				{
+					"name": "selectFacility"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          DBA_NAME as string,",
+				"          AKA_NAME as string,",
+				"          FACILITY_TYPE as string,",
+				"          INSPECTION_ID as string,",
+				"          INSPECTION_SK as decimal(38,0),",
+				"          INSPECTION_TYPE as string,",
+				"          INSPECTION_RESULT as string,",
+				"          INSPECTION_DATE as date,",
+				"          VIOLATION_CATEGORY_ID as decimal(38,0),",
+				"          VIOLATION_CATEGORY as string,",
+				"          VIOLATION_DESCRIPTION as string,",
+				"          RISK_LEVEL as string,",
+				"          LATITUDE as double,",
+				"          LONGITUDE as double,",
+				"          ZIP_CODE as string,",
+				"          CITY as string,",
+				"          STATE as string,",
+				"          ADDRESS as string,",
+				"          VIOLATION_COUNT as decimal(38,0)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceStage",
+				"source(output(",
+				"          MAX_FACILITY as decimal(10,0)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     query: 'SELECT NVL(MAX(FACILITY_SK),0) AS MAX_FACILITY FROM FOOD_SCHEMA.DIM_FACILITY',",
+				"     format: 'query') ~> sourceFacility",
+				"source(output(",
+				"          FACILITY_SK as decimal(10,0),",
+				"          FACILITY_TYPE as string,",
+				"          DBA_NAME as string,",
+				"          AKA_NAME as string,",
+				"          DI_LOAD_DT as date,",
+				"          DI_JOB_ID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceFacility2",
+				"sourceStage, sourceFacility join(1==1,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinFacility",
+				"surrogateKey1 derive(FACILITY_SK = RowNum+ MAX_FACILITY,",
+				"          DI_JOB_ID = \"aka\",",
+				"          DI_LOAD_DT = currentTimestamp()) ~> derivedColumn1",
+				"joinFacility aggregate(groupBy(DBA_NAME,",
+				"          AKA_NAME,",
+				"          FACILITY_TYPE,",
+				"          MAX_FACILITY),",
+				"     Count = count(INSPECTION_ID)) ~> aggregate1",
+				"selectFacility keyGenerate(output(RowNum as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> surrogateKey1",
+				"aggregate1, sourceFacility2 join(aggregate1@DBA_NAME == sourceFacility2@DBA_NAME",
+				"     && aggregate1@AKA_NAME == sourceFacility2@AKA_NAME",
+				"     && aggregate1@FACILITY_TYPE == sourceFacility2@FACILITY_TYPE,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinFacility2",
+				"joinFacility2 select(mapColumn(",
+				"          DBA_NAME = aggregate1@DBA_NAME,",
+				"          AKA_NAME = aggregate1@AKA_NAME,",
+				"          FACILITY_TYPE = aggregate1@FACILITY_TYPE,",
+				"          MAX_FACILITY,",
+				"          Count,",
+				"          FACILITY_SK",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectFacility",
+				"derivedColumn1 select(mapColumn(",
+				"          DBA_NAME,",
+				"          AKA_NAME,",
+				"          FACILITY_TYPE,",
+				"          FACILITY_SK,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          FACILITY_SK as decimal(10,0),",
+				"          FACILITY_TYPE as string,",
+				"          DBA_NAME as string,",
+				"          AKA_NAME as string,",
+				"          DI_LOAD_DT as date,",
+				"          DI_JOB_ID as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          FACILITY_SK,",
+				"          FACILITY_TYPE,",
+				"          DBA_NAME,",
+				"          AKA_NAME,",
+				"          DI_LOAD_DT,",
+				"          DI_JOB_ID",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}

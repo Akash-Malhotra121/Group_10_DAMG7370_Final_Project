@@ -1,0 +1,133 @@
+{
+	"name": "SnowflakeDallas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Snowflake_Chicago_Dallas",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "INSPECTION_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "RESTAURANT_NAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "INSPECTION_TYPE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "INSPECTION_DATE",
+				"type": "DATE"
+			},
+			{
+				"name": "INSPECTION_SCORE",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "STREET_NAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "STREET_TYPE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ZIP_CODE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "INSPECTION_MONTH",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "INSPECTION_YEAR",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "LAT_LONG_LOC",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "NAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "VALUE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "VIOLATIONS_1",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "VIOLATION_POINT",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "VIOLATION_OTHER",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "STATE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "FACILITY_TYPE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "CITY",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "RIGHT_INSPECTION_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "VIOLATION_CATEGORY_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "VIOLATION_CATEGORY",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "LATITUDE",
+				"type": "FLOAT",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "LONGITUDE",
+				"type": "FLOAT",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "RISK_LEVEL",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "INSPECTION_RESULT",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "AKA_NAME",
+				"type": "VARCHAR"
+			}
+		],
+		"typeProperties": {
+			"schema": "FOOD_SCHEMA",
+			"table": "STG_DALLAS"
+		}
+	}
+}

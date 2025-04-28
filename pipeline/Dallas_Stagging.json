@@ -1,0 +1,933 @@
+{
+	"name": "Dallas_Stagging",
+	"properties": {
+		"activities": [
+			{
+				"name": "Dallas_Raw",
+				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.FILENAME_LIST",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Dallas",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.00:30:00",
+								"retry": 1,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ParquetSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": false,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "ParquetReadSettings"
+									}
+								},
+								"sink": {
+									"type": "SnowflakeV2Sink",
+									"importSettings": {
+										"type": "SnowflakeImportCopyCommand"
+									}
+								},
+								"enableStaging": true,
+								"stagingSettings": {
+									"linkedServiceName": {
+										"referenceName": "StaggingTable",
+										"type": "LinkedServiceReference"
+									},
+									"path": "foodstg"
+								},
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "Inspection_ID",
+												"type": "String"
+											},
+											"sink": {
+												"name": "INSPECTION_ID",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Restaurant_Name",
+												"type": "String"
+											},
+											"sink": {
+												"name": "RESTAURANT_NAME",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Inspection_Type",
+												"type": "String"
+											},
+											"sink": {
+												"name": "INSPECTION_TYPE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Inspection_Date",
+												"type": "String"
+											},
+											"sink": {
+												"name": "INSPECTION_DATE",
+												"type": "DateTime"
+											}
+										},
+										{
+											"source": {
+												"name": "Inspection_Score",
+												"type": "Int64"
+											},
+											"sink": {
+												"name": "INSPECTION_SCORE",
+												"type": "Int64"
+											}
+										},
+										{
+											"source": {
+												"name": "Street_Name",
+												"type": "String"
+											},
+											"sink": {
+												"name": "STREET_NAME",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Street_Type",
+												"type": "String"
+											},
+											"sink": {
+												"name": "STREET_TYPE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Zip_Code",
+												"type": "Int64"
+											},
+											"sink": {
+												"name": "ZIP_CODE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Inspection_Month",
+												"type": "String"
+											},
+											"sink": {
+												"name": "INSPECTION_MONTH",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Inspection_Year",
+												"type": "String"
+											},
+											"sink": {
+												"name": "INSPECTION_YEAR",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Lat_Long_Loc",
+												"type": "String"
+											},
+											"sink": {
+												"name": "LAT_LONG_LOC",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Name",
+												"type": "String"
+											},
+											"sink": {
+												"name": "NAME",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Value",
+												"type": "String"
+											},
+											"sink": {
+												"name": "VALUE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Violations1",
+												"type": "String"
+											},
+											"sink": {
+												"name": "VIOLATIONS_1",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Voilation_Point",
+												"type": "Int64"
+											},
+											"sink": {
+												"name": "VIOLATION_POINT",
+												"type": "Int64"
+											}
+										},
+										{
+											"source": {
+												"name": "Voilation_Other",
+												"type": "String"
+											},
+											"sink": {
+												"name": "VIOLATION_OTHER",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "State",
+												"type": "String"
+											},
+											"sink": {
+												"name": "STATE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Facility_Type",
+												"type": "String"
+											},
+											"sink": {
+												"name": "FACILITY_TYPE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "City",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CITY",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Right_Inspection_ID",
+												"type": "String"
+											},
+											"sink": {
+												"name": "RIGHT_INSPECTION_ID",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Violations_Category_Id",
+												"type": "Int64"
+											},
+											"sink": {
+												"name": "VIOLATION_CATEGORY_ID",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Violations_Category",
+												"type": "String"
+											},
+											"sink": {
+												"name": "VIOLATION_CATEGORY",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Latitude",
+												"type": "String"
+											},
+											"sink": {
+												"name": "LATITUDE",
+												"type": "Double"
+											}
+										},
+										{
+											"source": {
+												"name": "Longitude",
+												"type": "String"
+											},
+											"sink": {
+												"name": "LONGITUDE",
+												"type": "Double"
+											}
+										},
+										{
+											"source": {
+												"name": "Risk_Level",
+												"type": "String"
+											},
+											"sink": {
+												"name": "RISK_LEVEL",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Inspection_Result",
+												"type": "String"
+											},
+											"sink": {
+												"name": "INSPECTION_RESULT",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "AKA_Name",
+												"type": "String"
+											},
+											"sink": {
+												"name": "AKA_NAME",
+												"type": "String"
+											}
+										}
+									]
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "Dallas_Parquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "STG_DALLAS",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.FILENAME_LIST",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Get MetadataDallas",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.00:30:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "Dallas_Parquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								},
+								"fieldList": [
+									"size"
+								],
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							}
+						},
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Get MetadataDallas",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@greater(activity('Get MetadataDallas').output.size, 60000)\n",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "ScriptFailed",
+										"type": "Script",
+										"dependsOn": [
+											{
+												"activity": "CopyFailed",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"linkedServiceName": {
+											"referenceName": "Snowflake_Chicago_Dallas",
+											"type": "LinkedServiceReference"
+										},
+										"typeProperties": {
+											"scripts": [
+												{
+													"type": "Query",
+													"text": {
+														"value": "INSERT INTO FOOD_SCHEMA.FILE_LOAD_LOG (\n    file_name, status, rows_read, rows_written, rows_skipped, error_message\n)\nVALUES (\n    '@{item()}',\n    'Skipped',\n    0,\n    0,\n    0,\n    'File is blank or does not exist'\n);\n",
+														"type": "Expression"
+													}
+												}
+											],
+											"scriptBlockExecutionTimeout": "02:00:00"
+										}
+									},
+									{
+										"name": "CopyFailed",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "ParquetSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": true,
+													"enablePartitionDiscovery": false
+												},
+												"formatSettings": {
+													"type": "ParquetReadSettings"
+												}
+											},
+											"sink": {
+												"type": "ParquetSink",
+												"storeSettings": {
+													"type": "AzureBlobFSWriteSettings"
+												},
+												"formatSettings": {
+													"type": "ParquetWriteSettings"
+												}
+											},
+											"enableStaging": false,
+											"logSettings": {
+												"enableCopyActivityLog": true,
+												"copyActivityLogSettings": {
+													"logLevel": "Warning",
+													"enableReliableLogging": false
+												},
+												"logLocationSettings": {
+													"linkedServiceName": {
+														"referenceName": "StaggingTable",
+														"type": "LinkedServiceReference"
+													},
+													"path": "staggingsnowflake"
+												}
+											},
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "Dallas_Parquet",
+												"type": "DatasetReference",
+												"parameters": {
+													"FileName": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "ErrorMetadata",
+												"type": "DatasetReference"
+											}
+										]
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "CopySuccess",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "ParquetSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": false,
+													"enablePartitionDiscovery": false
+												},
+												"formatSettings": {
+													"type": "ParquetReadSettings"
+												}
+											},
+											"sink": {
+												"type": "SnowflakeV2Sink",
+												"importSettings": {
+													"type": "SnowflakeImportCopyCommand"
+												}
+											},
+											"enableStaging": true,
+											"stagingSettings": {
+												"linkedServiceName": {
+													"referenceName": "StaggingTable",
+													"type": "LinkedServiceReference"
+												},
+												"path": "foodstg"
+											},
+											"logSettings": {
+												"enableCopyActivityLog": true,
+												"copyActivityLogSettings": {
+													"logLevel": "Warning",
+													"enableReliableLogging": false
+												},
+												"logLocationSettings": {
+													"linkedServiceName": {
+														"referenceName": "StaggingTable",
+														"type": "LinkedServiceReference"
+													},
+													"path": "staggingsnowflake"
+												}
+											},
+											"translator": {
+												"type": "TabularTranslator",
+												"mappings": [
+													{
+														"source": {
+															"name": "Inspection_ID",
+															"type": "String"
+														},
+														"sink": {
+															"name": "INSPECTION_ID",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Restaurant_Name",
+															"type": "String"
+														},
+														"sink": {
+															"name": "RESTAURANT_NAME",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Inspection_Type",
+															"type": "String"
+														},
+														"sink": {
+															"name": "INSPECTION_TYPE",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Inspection_Date",
+															"type": "String"
+														},
+														"sink": {
+															"name": "INSPECTION_DATE",
+															"type": "DateTime"
+														}
+													},
+													{
+														"source": {
+															"name": "Inspection_Score",
+															"type": "Int64"
+														},
+														"sink": {
+															"name": "INSPECTION_SCORE",
+															"type": "Int64"
+														}
+													},
+													{
+														"source": {
+															"name": "Street_Name",
+															"type": "String"
+														},
+														"sink": {
+															"name": "STREET_NAME",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Street_Type",
+															"type": "String"
+														},
+														"sink": {
+															"name": "STREET_TYPE",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Zip_Code",
+															"type": "Int64"
+														},
+														"sink": {
+															"name": "ZIP_CODE",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Inspection_Month",
+															"type": "String"
+														},
+														"sink": {
+															"name": "INSPECTION_MONTH",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Inspection_Year",
+															"type": "String"
+														},
+														"sink": {
+															"name": "INSPECTION_YEAR",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Lat_Long_Loc",
+															"type": "String"
+														},
+														"sink": {
+															"name": "LAT_LONG_LOC",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Name",
+															"type": "String"
+														},
+														"sink": {
+															"name": "NAME",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Value",
+															"type": "String"
+														},
+														"sink": {
+															"name": "VALUE",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Violations1",
+															"type": "String"
+														},
+														"sink": {
+															"name": "VIOLATIONS_1",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Voilation_Point",
+															"type": "Int64"
+														},
+														"sink": {
+															"name": "VIOLATION_POINT",
+															"type": "Int64"
+														}
+													},
+													{
+														"source": {
+															"name": "Voilation_Other",
+															"type": "String"
+														},
+														"sink": {
+															"name": "VIOLATION_OTHER",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "State",
+															"type": "String"
+														},
+														"sink": {
+															"name": "STATE",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Facility_Type",
+															"type": "String"
+														},
+														"sink": {
+															"name": "FACILITY_TYPE",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "City",
+															"type": "String"
+														},
+														"sink": {
+															"name": "CITY",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Right_Inspection_ID",
+															"type": "String"
+														},
+														"sink": {
+															"name": "RIGHT_INSPECTION_ID",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Violations_Category_Id",
+															"type": "Int64"
+														},
+														"sink": {
+															"name": "VIOLATION_CATEGORY_ID",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Violations_Category",
+															"type": "String"
+														},
+														"sink": {
+															"name": "VIOLATION_CATEGORY",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Latitude",
+															"type": "String"
+														},
+														"sink": {
+															"name": "LATITUDE",
+															"type": "Double"
+														}
+													},
+													{
+														"source": {
+															"name": "Longitude",
+															"type": "String"
+														},
+														"sink": {
+															"name": "LONGITUDE",
+															"type": "Double"
+														}
+													},
+													{
+														"source": {
+															"name": "Risk_Level",
+															"type": "String"
+														},
+														"sink": {
+															"name": "RISK_LEVEL",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Inspection_Result",
+															"type": "String"
+														},
+														"sink": {
+															"name": "INSPECTION_RESULT",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "AKA_Name",
+															"type": "String"
+														},
+														"sink": {
+															"name": "AKA_NAME",
+															"type": "String"
+														}
+													}
+												]
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "Dallas_Parquet",
+												"type": "DatasetReference",
+												"parameters": {
+													"FileName": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "STG_DALLAS",
+												"type": "DatasetReference"
+											}
+										]
+									},
+									{
+										"name": "ScriptSuccess",
+										"type": "Script",
+										"dependsOn": [
+											{
+												"activity": "CopySuccess",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"linkedServiceName": {
+											"referenceName": "Snowflake_Chicago_Dallas",
+											"type": "LinkedServiceReference"
+										},
+										"typeProperties": {
+											"scripts": [
+												{
+													"type": "Query",
+													"text": {
+														"value": "INSERT INTO FOOD_SCHEMA.FILE_LOAD_LOG (\n    file_name, status, rows_read, rows_written, rows_skipped, error_message\n)\nVALUES (\n    '@{item()}',\n    'Success',\n    @{activity('CopySuccess').output.rowsRead},\n    @{activity('CopySuccess').output.rowsCopied},\n    @{activity('CopySuccess').output.rowsSkipped},\n    NULL\n);\n",
+														"type": "Expression"
+													}
+												}
+											],
+											"scriptBlockExecutionTimeout": "02:00:00"
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"FILENAME": {
+				"type": "string"
+			},
+			"FILENAME_LIST": {
+				"type": "array"
+			}
+		},
+		"annotations": []
+	}
+}
